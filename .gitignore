@@ -1,0 +1,8 @@
+.DS_Store
+*.swp
+.idea
+*.pid
+out/*
+*.swo
+*.pyc
+node_modules
