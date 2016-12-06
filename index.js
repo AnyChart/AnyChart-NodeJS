@@ -1,23 +1,22 @@
-$ = require('jquery');
-fs = require('fs');
+var fs = require('fs');
 var jsdom = require('jsdom');
-window = jsdom.jsdom().defaultView;
-document = window.document;
-spawn	= require('child_process').spawn;
-
-
-document.createElementNS = function(ns, tagName) {
-  var elem = window.document.createElement(tagName);
-  elem.getBBox = function() {
-    return {
-      x: elem.offsetLeft,
-      y: elem.offsetTop,
-      width: elem.offsetWidth,
-      height: elem.offsetHeight
-    };
-  };
-  return elem;
-};
+// window = jsdom.jsdom().defaultView;
+// document = window.document;
+var spawn	= require('child_process').spawn;
+//
+//
+// document.createElementNS = function(ns, tagName) {
+//   var elem = window.document.createElement(tagName);
+//   elem.getBBox = function() {
+//     return {
+//       x: elem.offsetLeft,
+//       y: elem.offsetTop,
+//       width: elem.offsetWidth,
+//       height: elem.offsetHeight
+//     };
+//   };
+//   return elem;
+// };
 
 // var anychart = require('../ACDVF/out/anychart-bundle.min');
 
@@ -25,8 +24,9 @@ jsdom.env(
     '<div id="container"></div>',
     ["https://cdn.anychart.com/js/7.12.0/anychart-bundle.min.js"],
     function (errors, window) {
+      var $ = require("jquery")(window);
+      var chart, svg, convert, buffer;
       document = window.document;
-
 
       document.createElementNS = function(ns, tagName) {
         var elem = window.document.createElement(tagName);
@@ -43,12 +43,14 @@ jsdom.env(
 
       var anychart = window.anychart;
 
-      var chart = anychart.column([1, 2, 3, 4, 5]);
+      chart = anychart.column([1, 2, 3, 4, 5]);
       chart.container('container').draw();
 
+      var $container = $('#container svg')[0];
+      svg = $container.outerHTML;
 
-      var $container = $('container');
-      svg = $container.children().html();
+      console.log(svg);
+
       // Start convert
       convert	= spawn('convert', ['svg:-', 'png:-']);
 
@@ -58,6 +60,7 @@ jsdom.env(
 
       // Write the output of convert straight to the response
       convert.stdout.on('data', function(data) {
+        console.log('onData', data);
         try {
           var prevBufferLength = (buffer ? buffer.length : 0),
               newBuffer = new Buffer(prevBufferLength + data.length);
@@ -70,17 +73,15 @@ jsdom.env(
 
           buffer = newBuffer;
         } catch(e) {
-
+          console.log(e);
         }
       });
 
-
       convert.on('exit', function(code) {
-
+        console.log(code, buffer);
         fs.writeFile('chart.png', buffer, function() {
           console.log('Written to chart.png');
         });
-
       });
     }
 );
