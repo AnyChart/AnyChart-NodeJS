@@ -6,3 +6,4 @@ out/*
 *.swo
 *.pyc
 node_modules
+*.png
