@@ -1,0 +1,5 @@
+{
+  "name": "anychart-export",
+  "main": "./lib/anychart-export",
+  "version": "0.0.1"
+}
