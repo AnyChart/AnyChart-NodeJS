@@ -6,9 +6,7 @@ var opentype = require('opentype.js');
 var spawn = require('child_process').spawn;
 var loadedFonts = {};
 var font;
-var anychart = require("../ACDVF/out/anychart-bundle.min.js");
-
-console.log(anychart);
+var anychart = require("../ACDVF/out/anychart-bundle.min.js").anychart;
 
 // var any = fs.readFileSync("../ACDVF/out/anychart-bundle.min", "utf-8");
 // var anychart = require('../ACDVF/out/anychart-bundle.min');
@@ -55,7 +53,7 @@ function anychartify(window) {
 }
 
 
-function drawChart(anychart) {
+function drawChart(window) {
   var chart = anychart.column([1, 2, 3, 4, 5]);
   chart.a11y(false);
   chart.title('canvg is a SVG parser and renderer. It takes a URL to a SVG file or the text of an SVG file, parses it in JavaScript, and renders the result on a Canvas element. The rendering speed of the examples is about as fast as native SVG.');
@@ -86,7 +84,7 @@ opentype.load('/Library/Fonts/Verdana.ttf', function(err, font_) {
 
             // var anychart = window.anychart;
 
-            drawChart(anychart);
+            drawChart(window);
 
             var $container = $('#container svg')[0];
             svg = $container.outerHTML;
