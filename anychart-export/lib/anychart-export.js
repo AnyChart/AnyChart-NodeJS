@@ -1,37 +1,58 @@
-// (function(anychart, factory) {
-//   if (typeof module === 'object' && typeof module.exports === 'object') {
-//     if (typeof anychart.getGlobal == 'function') {
-//       factory.call(this, anychart);
-//     } else {
-//       module.exports = function(a) {
-//         if (typeof a.getGlobal != 'function') {
-//           throw new Error('anychart-export requires a anychart');
-//         }
-//
-//         return factory.call(this, a);
-//       };
-//     }
-//   } else {
-//     factory.call(this, anychart)
-//   }
-// })(typeof anychart !== 'undefined' ? anychart : this, function(anychart) {
-//   debugger;
-//   var window = anychart.getGlobal();
-//   var document = window.document;
+(function(anychart, factory) {
+  if (typeof module === 'object' && typeof module.exports === 'object') {
+    if (typeof anychart.getGlobal == 'function') {
+      factory.call(this, anychart);
+    } else {
+      module.exports = function(anychart) {
+        if (typeof anychart.getGlobal != 'function') {
+          throw new Error('anychart-export requires a anychart');
+        }
 
+        return factory.call(this, anychart);
+      };
+    }
+  } else {
+    factory.call(this, anychart)
+  }
+})(typeof anychart !== 'undefined' ? anychart : this, function(anychart) {
+  var window = anychart.getGlobal();
+  var document = window.document;
 
-(function () {
   var fs = require('fs');
   var opentype = require('opentype.js');
+  var childProcess = require('child_process');
   var spawnSync = require('child_process').spawnSync;
   var spawn = require('child_process').spawn;
   var extend = require('util')._extend;
+  var async = require('async');
+
+  // var exec = require('exec-queue');
+  //
+  // var queue = require('queue');
+  // var q = queue();
+  // q.concurrency = 4;
+  // q.timeout = 1;
+
+
+  // var ChildPool = require('child-pool');
+  // ChildPool.isBackground(true);
+  // var convertersPool;
+
   // var $ = require("jquery")(window);
+  // var im = require('imagemagick');
+  // var Stream = require('stream').Stream;
+  // var Inkscape = require('inkscape');
+  // var svink = require('svink').svink;
+
+
+  // var document = jsdom('<div id="container"></div>');
+  // var window = document.defaultView;
+
+  // var anychart = require('anychart')(window);
+
+
 
   var fonts = {};
-
-// var im = require('imagemagick');
-// var Stream = require('stream').Stream;
   var defaultImageSettings = [
     {
       name: 'type',
@@ -50,14 +71,7 @@
       value: 92
     }
   ];
-// var Inkscape = require('inkscape');
-// var svink = require('svink').svink;
 
-
-// var document = jsdom('<div id="container"></div>');
-// var window = document.defaultView;
-
-// var anychart = require('anychart')(window);
 
   function isPercent(value) {
     var l = value.length - 1;
@@ -208,24 +222,102 @@
     return svg;
   }
 
-  function convertSvgToImageData(svg, params, callback) {
-    var convert	= spawn('convert', ['svg:-', params.type + ':-']);
-    var imageData;
+  // function getImageConverter() {
+  //   if (!convertersPool)
+  //     convertersPool = new ChildPool(__dirname + '/image-converter-worker');
+  //   return convertersPool;
+  // }
 
-    convert.stdin.write(svg);
-    convert.stdin.end();
 
-    convert.stdout.on('data', function(data) {
-      imageData = data;
+  function setup_R_job(job, done) {
+    var R = spawn('convert', ['svg:-', job.params.type + ':-']);
+    var buffer;
+
+    R.stdin.write(job.svg);
+    R.stdin.end();
+
+    R.stdout.on('data', function(data) {
+      console.log('+++');
+      try {
+        buffer = data;
+      } catch (err) {
+        job.callback(err, null);
+        done();
+      }
     });
 
-    convert.on('exit', function(code) {
-      callback.call(null, imageData);
+    R.on('exit', function(code) {
+      console.log(code, buffer);
+      job.callback(null, buffer, job.params.target);
+      done();
     });
   }
 
+  var course_queue = async.queue(setup_R_job, 4);
+
+
+  function convertSvgToImageData(svg, params, callback) {
+    course_queue.push({svg: svg, params: params, callback: callback});
+
+    // exec('ls', function(err, stdout, stderr) {
+    //   console.log(stdout);
+    // });
+    // q.push(function(cb) {
+    //   console.log('!!!');
+    //   // callback(null, convertSvgToImageDataSync(svg, params), params.target);
+    //   // cb();
+    //
+    //   var convert = spawn('convert', ['svg:-', params.type + ':-']);
+    //   var buffer;
+    //
+    //   convert.stdin.write(svg);
+    //   convert.stdin.end();
+    //
+    //   convert.stdout.on('data', function(data) {
+    //     console.log('+++');
+    //     try {
+    //       buffer = data;
+    //     } catch (err) {
+    //       callback(err, null);
+    //       cb();
+    //     }
+    //   });
+    //
+    //   convert.on('exit', function(code) {
+    //     console.log(code, buffer);
+    //     callback(null, buffer, params.target);
+    //     cb();
+    //   });
+    // });
+    //
+    // q.start();
+    //
+    // console.log('length: ' + q.length);
+
+
+    // var convert = spawn('convert', ['svg:-', params.type + ':-']);
+    // var buffer;
+    //
+    // // console.log(convert);
+    //
+    // convert.stdin.write(svg);
+    // convert.stdin.end();
+    //
+    // convert.stdout.on('data', function(data) {
+    //   try {
+    //     buffer = data;
+    //   } catch (err) {
+    //     callback(err, null);
+    //   }
+    // });
+    //
+    // convert.on('exit', function(code) {
+    //   callback(null, buffer);
+    // });
+  }
+
   function convertSvgToImageDataSync(svg, params) {
-    var outputSize = '-size ' + parseFloat(params.width) + 'x' + parseFloat(params.height);
+    // var outputSize = '-size ' + parseFloat(params.width) + 'x' + parseFloat(params.height);
 
     var convert = spawnSync('convert',
         ['svg:-', params.type + ':-'],
@@ -234,34 +326,11 @@
         });
 
     return convert.stdout;
-
-
-    // var opt = {
-    //   input: './gg.svg',
-    //   output: './graphics.png'
-    // };
-    //
-    // svink(opt);
-
-
-    // var svgToPdfConverter = new Inkscape(['--export-pdf', '--export-width=1024']);
-    //
-    // fs.writeFile('./gg.svg', svg, function() {
-    //   console.log('Written to gg.svg');
-    //   var rs = fs.createReadStream('./gg.svg');
-    //   var ws = fs.createWriteStream('./foo.pdf');
-    //
-    //   rs.on('open', function () {
-    //     rs.pipe(svgToPdfConverter).pipe(ws);
-    //
-    //     console.log('Written to foo.pdf');
-    //     process.exit(0);
-    //   });
-    // });
   }
 
   function exportTo(target, options, callback) {
     var params = getParams(arguments);
+    params.target = target;
     if (params.type == 'svg') {
       process.nextTick(function() {
         var svg = getSvg(target, params);
@@ -296,4 +365,4 @@
   exports.loadFontSync = loadFontSync;
 
   return exports;
-})();
+});
