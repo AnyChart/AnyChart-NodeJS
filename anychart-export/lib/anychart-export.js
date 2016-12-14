@@ -20,7 +20,6 @@
 
   var fs = require('fs');
   var opentype = require('opentype.js');
-  var childProcess = require('child_process');
   var spawnSync = require('child_process').spawnSync;
   var spawn = require('child_process').spawn;
   var extend = require('util')._extend;
@@ -237,7 +236,7 @@
     R.stdin.end();
 
     R.stdout.on('data', function(data) {
-      console.log('+++');
+      // console.log(job.params.target.id, 'onData', data);
       try {
         buffer = data;
       } catch (err) {
@@ -246,14 +245,14 @@
       }
     });
 
-    R.on('exit', function(code) {
-      console.log(code, buffer);
+    R.on('close', function(code) {
+      // console.log(job.params.target.id, 'onExit', code, buffer);
       job.callback(null, buffer, job.params.target);
       done();
     });
   }
 
-  var course_queue = async.queue(setup_R_job, 4);
+  var course_queue = async.queue(setup_R_job, 10);
 
 
   function convertSvgToImageData(svg, params, callback) {

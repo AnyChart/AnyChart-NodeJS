@@ -1,7 +1,5 @@
 var fs = require('fs');
 var jsdom = require('jsdom').jsdom;
-var exec = require('exec-queue');
-
 
 var d = jsdom('<body><div id="container"></div></body>');
 var w = d.defaultView;
@@ -57,34 +55,35 @@ var options = {
 // });
 
 var startDate = new Date().getTime() / 1000;
-for (var i = 0, len = 7; i < len; i++) {
-  // $('<div></div>').attr('id', 'container' + i).appendTo('body');
-  //
-  //
+for (var i = 0, len = 10; i < len; i++) {
   var chart = anychart.column([1, 2, 3, 4, 5]);
   chart.id = i;
   chart.title('' + i);
   chart.bounds(0, 0, 500, 600);
   chart.container('container').draw();
-  //
+
   console.log(i);
+
+  // var image = anychart_export.exportToSync(chart, options);
+  // fs.writeFileSync('./images/image' + chart.id + '.' + options.type, image);
+  // var endDate = new Date().getTime() / 1000;
+  // console.log(endDate - startDate);
+
+  // anychart_export.exportTo(chart, options, function(err, image, chart) {
+  //   if (err) console.log(err);
+  //   var endDate = new Date().getTime() / 1000;
+  //   console.log(endDate - startDate);
   //
-  anychart_export.exportTo(chart, options, function(err, image, chart) {
-    if (err) console.log(err);
-    var endDate = new Date().getTime() / 1000;
-    console.log(endDate - startDate);
-
-    fs.writeFile('./images/image' + chart.id + '.' + options.type, image, function(err) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log('Written to file');
-      }
-    });
-  });
-
+  //   fs.writeFile('./images/image' + chart.id + '.' + options.type, image, function(err) {
+  //     if (err) {
+  //       console.log(err);
+  //     } else {
+  //       console.log('Written to file');
+  //     }
+  //   });
+  // });
+  chart.dispose();
 }
-
 
 
 
