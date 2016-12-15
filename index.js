@@ -4,10 +4,10 @@ var jsdom = require('jsdom').jsdom;
 var d = jsdom('<body><div id="container"></div></body>');
 var w = d.defaultView;
 
-var $ = require("jquery")(w);
+// var $ = require("jquery")(w);
 var anychart = require('anychart')(w);
 var anychart_export = require('./anychart-export/lib/anychart-export.js')(anychart);
-
+anychart_export.concurrency(10);
 
 // $('<div></div>').attr('id', 'container').appendTo('body');
 // $('body').append('<div id="container"></div>');
@@ -54,8 +54,14 @@ var options = {
 //   // process.exit(0);
 // });
 
+// var chart = anychart.column([1, 2, 3, 4, 5]);
+// chart.id = 0;
+// chart.title('' + 0);
+// chart.bounds(0, 0, 500, 600);
+// chart.container('container').draw();
+
 var startDate = new Date().getTime() / 1000;
-for (var i = 0, len = 10; i < len; i++) {
+for (var i = 0, len = 100; i < len; i++) {
   var chart = anychart.column([1, 2, 3, 4, 5]);
   chart.id = i;
   chart.title('' + i);
@@ -69,21 +75,22 @@ for (var i = 0, len = 10; i < len; i++) {
   // var endDate = new Date().getTime() / 1000;
   // console.log(endDate - startDate);
 
-  // anychart_export.exportTo(chart, options, function(err, image, chart) {
-  //   if (err) console.log(err);
-  //   var endDate = new Date().getTime() / 1000;
-  //   console.log(endDate - startDate);
-  //
-  //   fs.writeFile('./images/image' + chart.id + '.' + options.type, image, function(err) {
-  //     if (err) {
-  //       console.log(err);
-  //     } else {
-  //       console.log('Written to file');
-  //     }
-  //   });
-  // });
+  anychart_export.exportTo(chart, options, function(err, image, chart) {
+    if (err) console.log(err);
+    var endDate = new Date().getTime() / 1000;
+    console.log(endDate - startDate);
+
+    fs.writeFile('./images/image' + chart.id + '.' + options.type, image, function(err) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('Written to file');
+      }
+    });
+  });
   chart.dispose();
 }
+
 
 
 

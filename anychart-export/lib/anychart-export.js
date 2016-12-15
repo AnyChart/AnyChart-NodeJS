@@ -24,6 +24,8 @@
   var spawn = require('child_process').spawn;
   var extend = require('util')._extend;
   var async = require('async');
+  var numCPUs = require('os').cpus().length;
+  var defaultFontsDir = __dirname + '/../fonts';
 
   // var exec = require('exec-queue');
   //
@@ -50,7 +52,7 @@
   // var anychart = require('anychart')(window);
 
 
-
+  var convertQueue = async.queue(convertWorker, numCPUs);
   var fonts = {};
   var defaultImageSettings = [
     {
@@ -77,27 +79,63 @@
     return (typeof value == 'string') && l >= 0 && value.indexOf('%', l) == l;
   }
 
-  function loadDefaultFonts(callback) {
+  var loadingDeafaultFontsStarted = false;
+  var fontsCount = 0;
+  var loadedFonts = 0;
 
+  function check(callback) {
+    loadedFonts++;
+    if (fontsCount == loadedFonts) {
+      loadingDeafaultFontsStarted = false;
+      callback();
+    }
+  }
+
+  function loadDefaultFonts(callback) {
+    if (!loadingDeafaultFontsStarted) {
+      loadingDeafaultFontsStarted = true;
+
+      fs.readdir(defaultFontsDir, function(err, files) {
+        //This needs for opentype lib for loading fonts from local.
+        this.window = undefined;
+
+        fontsCount = files.length;
+        loadedFonts = 0;
+        for (var i = 0, len = fontsCount; i < len; i++) {
+          var fileName = files[i];
+          var fontName = fileName.split('.')[0];
+
+          if (!fonts[fontName]) {
+            opentype.load(defaultFontsDir + '/' + fileName, function(err, font) {
+              var fontName = font.names.fullName.en;
+              fonts[fontName] = font;
+              check(callback);
+            });
+          } else {
+            check(callback);
+          }
+        }
+      });
+    } else {
+       console.log('Warning! Loading default fonts already started.');
+    }
   }
 
   function loadDefaultFontsSync() {
-    var fontFilesList = fs.readdirSync(__dirname + '/../fonts');
+    var fontFilesList = fs.readdirSync(defaultFontsDir);
 
     for (var i = 0, len = fontFilesList.length; i < len; i++) {
       var fileName = fontFilesList[i];
       var fontName = fileName.split('.')[0];
       if (!fonts[fontName]) {
-        fonts[fontName] = opentype.loadSync(__dirname + '/../fonts/' + fileName);
+        fonts[fontName] = opentype.loadSync(defaultFontsDir + '/' + fileName);
       }
     }
     return fonts;
   }
 
-  loadDefaultFontsSync();
-
-  function anychartify() {
-    document.createElementNS = function(ns, tagName) {
+  function anychartify(doc) {
+    doc.createElementNS = function(ns, tagName) {
       var elem = document.createElement(tagName);
       elem.getBBox = function() {
         var text = elem.innerHTML;
@@ -136,50 +174,6 @@
       };
       return elem;
     };
-  }
-
-  anychartify();
-
-  function exportToPng_() {
-    var $container = $('#container svg')[0];
-    var svg = $container.outerHTML;
-    var convert, buffer;
-
-    fs.writeFile('gg.svg', svg, function() {
-      console.log('Written to gg.svg');
-    });
-
-// Start convert
-    convert = spawn('convert', ['svg:-', 'png:-']);
-
-// Pump in the svg content
-    convert.stdin.write(svg);
-    convert.stdin.end();
-
-// Write the output of convert straight to the response
-    convert.stdout.on('data', function(data) {
-      try {
-        var prevBufferLength = (buffer ? buffer.length : 0),
-            newBuffer = new Buffer(prevBufferLength + data.length);
-
-        if (buffer) {
-          buffer.copy(newBuffer, 0, 0);
-        }
-
-        data.copy(newBuffer, prevBufferLength, 0);
-
-        buffer = newBuffer;
-      } catch (e) {
-        console.log(e);
-      }
-    });
-
-    convert.on('exit', function(code) {
-      fs.writeFile('chart.png', buffer, function() {
-        console.log('Written to chart.png');
-        process.exit(0);
-      });
-    });
   }
 
   function isFunction(value) {
@@ -221,98 +215,46 @@
     return svg;
   }
 
-  // function getImageConverter() {
-  //   if (!convertersPool)
-  //     convertersPool = new ChildPool(__dirname + '/image-converter-worker');
-  //   return convertersPool;
-  // }
-
-
-  function setup_R_job(job, done) {
-    var R = spawn('convert', ['svg:-', job.params.type + ':-']);
-    var buffer;
-
-    R.stdin.write(job.svg);
-    R.stdin.end();
-
-    R.stdout.on('data', function(data) {
-      // console.log(job.params.target.id, 'onData', data);
-      try {
-        buffer = data;
-      } catch (err) {
-        job.callback(err, null);
-        done();
-      }
-    });
-
-    R.on('close', function(code) {
-      // console.log(job.params.target.id, 'onExit', code, buffer);
-      job.callback(null, buffer, job.params.target);
-      done();
-    });
+  function concurrency(count) {
+    convertQueue.concurrency = count;
   }
 
-  var course_queue = async.queue(setup_R_job, 10);
+  function convertWorker(task, done) {
+    try {
+      var childProcess = spawn('convert', ['svg:-', task.params.type + ':-']);
+        var buffer;
 
+        childProcess.stdin.write(task.svg);
+        childProcess.stdin.end();
+
+        childProcess.stdout.on('data', function(data) {
+          try {
+            var prevBufferLength = (buffer ? buffer.length : 0),
+                newBuffer = new Buffer(prevBufferLength + data.length);
+
+            if (buffer) {
+              buffer.copy(newBuffer, 0, 0);
+            }
+
+            data.copy(newBuffer, prevBufferLength, 0);
+
+            buffer = newBuffer;
+          } catch (err) {
+            done(err, null, task.params.target);
+          }
+        });
+
+        childProcess.on('close', function(code) {
+          done(null, buffer, task.params.target);
+        });
+    } catch (err) {
+      done(err, null, task.params.target);
+    }
+  }
 
   function convertSvgToImageData(svg, params, callback) {
-    course_queue.push({svg: svg, params: params, callback: callback});
-
-    // exec('ls', function(err, stdout, stderr) {
-    //   console.log(stdout);
-    // });
-    // q.push(function(cb) {
-    //   console.log('!!!');
-    //   // callback(null, convertSvgToImageDataSync(svg, params), params.target);
-    //   // cb();
-    //
-    //   var convert = spawn('convert', ['svg:-', params.type + ':-']);
-    //   var buffer;
-    //
-    //   convert.stdin.write(svg);
-    //   convert.stdin.end();
-    //
-    //   convert.stdout.on('data', function(data) {
-    //     console.log('+++');
-    //     try {
-    //       buffer = data;
-    //     } catch (err) {
-    //       callback(err, null);
-    //       cb();
-    //     }
-    //   });
-    //
-    //   convert.on('exit', function(code) {
-    //     console.log(code, buffer);
-    //     callback(null, buffer, params.target);
-    //     cb();
-    //   });
-    // });
-    //
-    // q.start();
-    //
-    // console.log('length: ' + q.length);
-
-
-    // var convert = spawn('convert', ['svg:-', params.type + ':-']);
-    // var buffer;
-    //
-    // // console.log(convert);
-    //
-    // convert.stdin.write(svg);
-    // convert.stdin.end();
-    //
-    // convert.stdout.on('data', function(data) {
-    //   try {
-    //     buffer = data;
-    //   } catch (err) {
-    //     callback(err, null);
-    //   }
-    // });
-    //
-    // convert.on('exit', function(code) {
-    //   callback(null, buffer);
-    // });
+    convertWorker({svg: svg, params: params}, callback);
+    // convertQueue.push({svg: svg, params: params}, callback);
   }
 
   function convertSvgToImageDataSync(svg, params) {
@@ -358,10 +300,22 @@
 
   }
 
+  loadDefaultFontsSync();
+  // loadDefaultFonts(function() {
+  //   console.log('all fonts loaded');
+  // });
+  // setTimeout(function() {
+  //   loadDefaultFonts(function() {
+  //     console.log('all fonts loaded');
+  //   })
+  // }, 1000);
+  anychartify(document);
+
   exports.exportTo = exportTo;
   exports.exportToSync = exportToSync;
   exports.loadFont = loadFont;
   exports.loadFontSync = loadFontSync;
+  exports.concurrency = concurrency;
 
   return exports;
 });
