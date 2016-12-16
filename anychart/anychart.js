@@ -1,0 +1,1 @@
+module.exports = require('../../ACDVF/out/anychart-bundle.min.js');

@@ -22,6 +22,7 @@
   var opentype = require('opentype.js');
   var spawnSync = require('child_process').spawnSync;
   var spawn = require('child_process').spawn;
+  var execSync = require('child_process').execSync;
   var extend = require('util')._extend;
   var async = require('async');
   var numCPUs = require('os').cpus().length;
@@ -52,7 +53,7 @@
   // var anychart = require('anychart')(window);
 
 
-  var convertQueue = async.queue(convertWorker, numCPUs);
+  var convertQueue = async.queue(convertWorker, getAvailableProcessesCount());
   var fonts = {};
   var defaultImageSettings = [
     {
@@ -83,7 +84,7 @@
   var fontsCount = 0;
   var loadedFonts = 0;
 
-  function check(callback) {
+  function checkIfAllFontsLoaded(callback) {
     loadedFonts++;
     if (fontsCount == loadedFonts) {
       loadingDeafaultFontsStarted = false;
@@ -109,10 +110,10 @@
             opentype.load(defaultFontsDir + '/' + fileName, function(err, font) {
               var fontName = font.names.fullName.en;
               fonts[fontName] = font;
-              check(callback);
+              checkIfAllFontsLoaded(callback);
             });
           } else {
-            check(callback);
+            checkIfAllFontsLoaded(callback);
           }
         }
       });
@@ -199,31 +200,54 @@
   }
 
   function getSvg(target, params) {
-    var container = target.container();
-    if (!container) {
-      console.log('Warning! Target chart has not container. Use container() method to set it.');
-      return '';
-    }
-    var bounds = target.bounds();
-    if (isPercent(bounds.left) || isPercent(bounds.top) || isPercent(bounds.width) || isPercent(bounds.height)) {
+    var svg;
+    if (typeof target == 'string') {
+      svg = target;
+    } else {
+      var container = target.container();
+      if (!container) {
+        console.log('Warning! Target chart has not container. Use container() method to set it.');
+        return '';
+      }
+      var bounds = target.bounds();
+      if (isPercent(bounds.left) || isPercent(bounds.top) || isPercent(bounds.width) || isPercent(bounds.height)) {
 
-      console.log('Warning! Bounds of chart should be set in pixels. See https://api.anychart.com/7.12.0/anychart.core.Chart#bounds how do it.');
-    }
+        console.log('Warning! Bounds of chart should be set in pixels. See https://api.anychart.com/7.12.0/anychart.core.Chart#bounds how do it.');
+      }
 
-    var svgElement = container.container().getElementsByTagName('svg')[0];
-    var svg = svgElement.outerHTML;
+      var svgElement = container.container().getElementsByTagName('svg')[0];
+      svg = svgElement.outerHTML;
+    }
     return svg;
   }
 
+  function getAvailableProcessesCount() {
+    // var proclimit = +spawnSync('ulimit',['-u']).stdout.toString();
+    // var procExec = +spawnSync('wc',['-l'], {
+    //   input: spawnSync('ps',['ax']).stdout
+    // }).stdout;
+
+    var procMetrics = execSync('ulimit -u && ps ax | wc -l').toString().trim().split(/\n\s+/g);
+    return procMetrics[0] - procMetrics[1];
+  }
+
   function concurrency(count) {
+    var availableProcForExec = getAvailableProcessesCount();
+
+    if (count > availableProcForExec) {
+      count = availableProcForExec;
+      console.log('Warning! You can spawn only ' + availableProcForExec + ' process at a time.');
+    }
+
     convertQueue.concurrency = count;
   }
 
   function convertWorker(task, done) {
+    var childProcess;
     try {
-      var childProcess = spawn('convert', ['svg:-', task.params.type + ':-']);
-        var buffer;
-
+      childProcess = spawn('convert', ['svg:-', task.params.type + ':-']);
+      var buffer;
+      if (typeof childProcess.pid != 'undefined') {
         childProcess.stdin.write(task.svg);
         childProcess.stdin.end();
 
@@ -247,14 +271,24 @@
         childProcess.on('close', function(code) {
           done(null, buffer, task.params.target);
         });
+
+        childProcess.on('error', function(code) {
+          console.log('+++error');
+        });
+      }
     } catch (err) {
       done(err, null, task.params.target);
     }
   }
 
   function convertSvgToImageData(svg, params, callback) {
-    convertWorker({svg: svg, params: params}, callback);
-    // convertQueue.push({svg: svg, params: params}, callback);
+    // var availableProcForExec = getAvailableProcessesCount();
+    // if (convertQueue.concurrency > availableProcForExec) {
+    //   convertQueue.concurrency = availableProcForExec;
+    //   console.log('concurrency changed: ' + availableProcForExec);
+    // }
+    // convertWorker({svg: svg, params: params}, callback);
+    convertQueue.push({svg: svg, params: params}, callback);
   }
 
   function convertSvgToImageDataSync(svg, params) {
