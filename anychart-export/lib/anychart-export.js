@@ -15,7 +15,6 @@
     factory.call(this, anychart)
   }
 })(typeof anychart !== 'undefined' ? anychart : this, function(anychart) {
-  debugger;
   // var window = anychart.getGlobal();
   var document = anychart.getGlobal().document;
 
@@ -348,15 +347,13 @@
         callback(err, font);
       });
     } else {
-      console.log(22);
       return new promiseLibrary(function(resolve, reject) {
-        console.log(path);
-        var window = undefined;
         opentype.load(path, function(err, font) {
           // console.log(err, font);
           if (err) {
             reject(err);
           } else {
+            debugger;
             fonts[font.names.fullName.en] = font;
             resolve(font);
           }
