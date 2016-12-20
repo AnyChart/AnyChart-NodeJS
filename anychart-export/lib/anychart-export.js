@@ -173,21 +173,24 @@
       });
 
       childProcess.on('close', function(code) {
+        console.log('close', arguments);
         if (!code) {
           done(null, buffer);
         }
       });
 
       childProcess.on('error', function(err) {
+        console.log('error', arguments);
         if (err.code == 'ENOENT') {
           console.log('Warning! Please install imagemagick utility. (https://www.imagemagick.org/script/binary-releases.php)');
         }
         done(err, null);
       });
+
+      childProcess.on('exit', function() {
+        console.log('exit', arguments);
+      });
     } catch (err) {
-      if (err.code == 'ENOENT') {
-        console.log('Warning! Please install imagemagick utility. (https://www.imagemagick.org/script/binary-releases.php)');
-      }
       done(err, null);
     }
   }
