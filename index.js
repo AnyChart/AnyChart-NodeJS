@@ -26,7 +26,7 @@ var options = {
 //   console.log(err, font);
 // });
 
-anychart_export.loadFont('/Library/Fonts/Verdana Bold Italic.ttf').then(function(font) {
+// anychart_export.loadFont('/Library/Fonts/Verdana Bold Italic.ttf').then(function(font) {
   // console.log(font.names.fullName.en);
   // console.log(font.names);
 
@@ -37,7 +37,7 @@ anychart_export.loadFont('/Library/Fonts/Verdana Bold Italic.ttf').then(function
       .text('Bla-bla')
       .fontStyle('italic')
       .fontWeight('bold')
-      .fontFamily(font.names.fontFamily.en)
+      .fontFamily('Verdana')
       .fontSize(42);
   chart.bounds(0, 0, 500, 600);
   chart.container('container').draw();
@@ -62,9 +62,9 @@ anychart_export.loadFont('/Library/Fonts/Verdana Bold Italic.ttf').then(function
 
   chart.dispose();
 
-}, function(err) {
-  console.log(err);
-});
+// }, function(err) {
+//   console.log(err);
+// });
 
 // anychart_export.exportTo(chart, options.type, function(err, image) {
 //   if (err) {
