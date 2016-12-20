@@ -150,7 +150,7 @@
   function workerForConverting(task, done) {
     var childProcess;
     try {
-      childProcess = spawn(isWin ? 'magick_' : 'convert', ['svg:-', task.params.type + ':-']);
+      childProcess = spawn(isWin ? 'magick' : 'convert', ['svg:-', task.params.type + ':-']);
       var buffer;
       childProcess.stdin.write(task.svg);
       childProcess.stdin.end();
@@ -173,22 +173,16 @@
       });
 
       childProcess.on('close', function(code) {
-        console.log('close', arguments);
         if (!code) {
           done(null, buffer);
         }
       });
 
       childProcess.on('error', function(err) {
-        console.log('error', arguments);
         if (err.code == 'ENOENT') {
           console.log('Warning! Please install imagemagick utility. (https://www.imagemagick.org/script/binary-releases.php)');
         }
         done(err, null);
-      });
-
-      childProcess.on('exit', function() {
-        console.log('exit', arguments);
       });
     } catch (err) {
       done(err, null);
