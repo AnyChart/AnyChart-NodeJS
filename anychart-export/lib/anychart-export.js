@@ -15,41 +15,17 @@
     factory.call(this, anychart)
   }
 })(typeof anychart !== 'undefined' ? anychart : this, function(anychart) {
-  // var window = anychart.getGlobal();
   var document = anychart.getGlobal().document;
 
   var fs = require('fs');
-  var opentype = require('opentype.js');
   var spawnSync = require('child_process').spawnSync;
   var spawn = require('child_process').spawn;
   var execSync = require('child_process').execSync;
   var extend = require('util')._extend;
+  var opentype = require('opentype.js');
   var async = require('async');
   var defaultFontsDir = __dirname + '/../fonts';
   var promiseLibrary = typeof global.Promise == 'function' ? global.Promise : require('es6-promise').Promise;
-
-  // var exec = require('exec-queue');
-  //
-  // var queue = require('queue');
-  // var q = queue();
-  // q.concurrency = 4;
-  // q.timeout = 1;
-
-  // var ChildPool = require('child-pool');
-  // ChildPool.isBackground(true);
-  // var convertersPool;
-
-  // var $ = require("jquery")(window);
-  // var im = require('imagemagick');
-  // var Stream = require('stream').Stream;
-  // var Inkscape = require('inkscape');
-  // var svink = require('svink').svink;
-
-  // var document = jsdom('<div id="container"></div>');
-  // var window = document.defaultView;
-
-  // var anychart = require('anychart')(window);
-
 
   var convertQueue = async.queue(workerForConverting, getAvailableProcessesCount());
   var fonts = {};
@@ -57,24 +33,8 @@
     {
       name: 'type',
       value: 'png'
-    },
-    {
-      name: 'width',
-      value: 1024
-    },
-    {
-      name: 'height',
-      value: 768
-    },
-    {
-      name: 'quality',
-      value: 92
     }
   ];
-  var loadingDefaultFontsStarted = false;
-  var fontsCount = 0;
-  var loadedFonts = 0;
-
 
 //region --- Utils and settings
   function isPercent(value) {
@@ -84,14 +44,6 @@
 
   function isFunction(value) {
     return typeof(value) == 'function';
-  }
-
-  function checkIfAllFontsLoaded(callback) {
-    loadedFonts++;
-    if (fontsCount == loadedFonts) {
-      loadingDefaultFontsStarted = false;
-      callback();
-    }
   }
 
   function concurrency(count) {
@@ -111,12 +63,16 @@
       elem.getBBox = function() {
         var text = elem.innerHTML;
         var fontSize = parseFloat(elem.getAttribute('font-size'));
-        var fontFamily = elem.getAttribute('font-family');
+        var fontFamily = elem.getAttribute('font-family').toLowerCase();
+        var fontWeight = elem.getAttribute('font-weight').toLowerCase();
+        var fontStyle = elem.getAttribute('font-style').toLowerCase();
+
         var fontsArr = fontFamily.split(', ');
 
         var font;
         for (var i = 0, len = fontsArr.length; i < len; i++) {
-          if (font = fonts[fontsArr[i]])
+          var name = fontsArr[i] + (fontWeight == 'normal' ? '' : ' ' + fontWeight) + (fontStyle == 'normal' ? '' : ' ' + fontStyle);
+          if (font = fonts[name])
             break;
         }
         if (!font)
@@ -138,8 +94,6 @@
 
           width += Math.abs(metrics.xMax - metrics.xMin) + metrics.leftSideBearing + metrics.rightSideBearing
         });
-
-        // console.log({x: 0, y: top,  width: width, height: height});
 
         return {x: 0, y: top, width: width, height: height};
       };
@@ -187,11 +141,6 @@
   }
 
   function getAvailableProcessesCount() {
-    // var proclimit = +spawnSync('ulimit',['-u']).stdout.toString();
-    // var procExec = +spawnSync('wc',['-l'], {
-    //   input: spawnSync('ps',['ax']).stdout
-    // }).stdout;
-
     var procMetrics = execSync('ulimit -u && ps ax | wc -l').toString().trim().split(/\n\s+/g);
     return procMetrics[0] - procMetrics[1];
   }
@@ -231,60 +180,23 @@
     }
   }
 
-  function loadDefaultFonts(callback) {
-    if (!loadingDefaultFontsStarted) {
-      loadingDefaultFontsStarted = true;
-
-      fs.readdir(defaultFontsDir, function(err, files) {
-        //This needs for opentype lib for loading fonts from local.
-        fontsCount = files.length;
-        loadedFonts = 0;
-        for (var i = 0, len = fontsCount; i < len; i++) {
-          var fileName = files[i];
-          var fontName = fileName.split('.')[0];
-
-          if (!fonts[fontName]) {
-            opentype.load(defaultFontsDir + '/' + fileName, function(err, font) {
-              var fontName = font.names.fullName.en;
-              fonts[fontName] = font;
-              checkIfAllFontsLoaded(callback);
-            });
-          } else {
-            checkIfAllFontsLoaded(callback);
-          }
-        }
-      });
-    } else {
-      console.log('Warning! Loading default fonts already started.');
-    }
-  }
-
   function loadDefaultFontsSync() {
     var fontFilesList = fs.readdirSync(defaultFontsDir);
 
     for (var i = 0, len = fontFilesList.length; i < len; i++) {
       var fileName = fontFilesList[i];
-      var fontName = fileName.split('.')[0];
-      if (!fonts[fontName]) {
-        fonts[fontName] = opentype.loadSync(defaultFontsDir + '/' + fileName);
-      }
+      var font = opentype.loadSync(defaultFontsDir + '/' + fileName);
+      fonts[font.names.fullName.en.toLowerCase()] = font;
     }
+
     return fonts;
   }
 
   function convertSvgToImageData(svg, params, callback) {
-    // var availableProcForExec = getAvailableProcessesCount();
-    // if (convertQueue.concurrency > availableProcForExec) {
-    //   convertQueue.concurrency = availableProcForExec;
-    //   console.log('concurrency changed: ' + availableProcForExec);
-    // }
-    // convertWorker({svg: svg, params: params}, callback);
     convertQueue.push({svg: svg, params: params}, callback);
   }
 
   function convertSvgToImageDataSync(svg, params) {
-    // var outputSize = '-size ' + parseFloat(params.width) + 'x' + parseFloat(params.height);
-
     var convert = spawnSync('convert',
         ['svg:-', params.type + ':-'],
         {
@@ -342,19 +254,17 @@
     if (typeof callback == 'function') {
       opentype.load(path, function(err, font) {
         if (!err)
-          fonts[font.names.fullName.en] = font;
+          fonts[font.names.fullName.en.toLowerCase()] = font;
 
         callback(err, font);
       });
     } else {
       return new promiseLibrary(function(resolve, reject) {
         opentype.load(path, function(err, font) {
-          // console.log(err, font);
           if (err) {
             reject(err);
           } else {
-            debugger;
-            fonts[font.names.fullName.en] = font;
+            fonts[font.names.fullName.en.toLowerCase()] = font;
             resolve(font);
           }
         });
@@ -363,7 +273,7 @@
   }
 
   function loadFontSync(path) {
-    return fonts[font.names.fullName.en] = opentype.loadSync(path);
+    return fonts[font.names.fullName.en.toLowerCase()] = opentype.loadSync(path);
   }
 //endregion
 

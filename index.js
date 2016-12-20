@@ -26,12 +26,19 @@ var options = {
 //   console.log(err, font);
 // });
 
-anychart_export.loadFont('/Library/Fonts/Webdings.ttf').then(function(font) {
-  console.log(font.names.fullName.en);
+anychart_export.loadFont('/Library/Fonts/Verdana Bold Italic.ttf').then(function(font) {
+  // console.log(font.names.fullName.en);
+  // console.log(font.names);
 
   var chart = anychart.column([1, 2, 3, 4, 5]);
   // chart.id = i;
-  chart.title().text('Bla-bla').enabled(true).fontFamily('Comic Sans MS').fontSize(42);
+  chart.title()
+      .enabled(true)
+      .text('Bla-bla')
+      .fontStyle('italic')
+      .fontWeight('bold')
+      .fontFamily(font.names.fontFamily.en)
+      .fontSize(42);
   chart.bounds(0, 0, 500, 600);
   chart.container('container').draw();
 
@@ -40,8 +47,6 @@ anychart_export.loadFont('/Library/Fonts/Webdings.ttf').then(function(font) {
   anychart_export.exportTo(chart, options).then(function(image) {
     // var endDate = new Date().getTime() / 1000;
     // console.log(endDate - startDate);
-
-    console.log(image);
 
     fs.writeFile('./images/bla' + '.' + options.type, image, function(err) {
       if (err) {
