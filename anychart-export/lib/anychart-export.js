@@ -149,7 +149,9 @@
   function workerForConverting(task, done) {
     var childProcess;
     try {
-      childProcess = spawn('convert', ['svg:-', task.params.type + ':-']);
+      var isWin = /^win/.test(process.platform);
+
+      childProcess = spawn(isWin ? 'magic' : 'convert', ['svg:-', task.params.type + ':-']);
       var buffer;
       if (typeof childProcess.pid != 'undefined') {
         childProcess.stdin.write(task.svg);
