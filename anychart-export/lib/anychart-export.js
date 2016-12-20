@@ -27,6 +27,7 @@
   var defaultFontsDir = __dirname + '/../fonts';
   var promiseLibrary = typeof global.Promise == 'function' ? global.Promise : require('es6-promise').Promise;
 
+  var isWin = /^win/.test(process.platform);
   var defaultParallelsTasks = 100;
   var convertQueue = async.queue(workerForConverting, defaultParallelsTasks);
   var fonts = {};
@@ -149,37 +150,42 @@
   function workerForConverting(task, done) {
     var childProcess;
     try {
-      var isWin = /^win/.test(process.platform);
-
-      childProcess = spawn(isWin ? 'magick' : 'convert', ['svg:-', task.params.type + ':-']);
+      childProcess = spawn(isWin ? 'magick_' : 'convert', ['svg:-', task.params.type + ':-']);
       var buffer;
-      if (typeof childProcess.pid != 'undefined') {
-        childProcess.stdin.write(task.svg);
-        childProcess.stdin.end();
+      childProcess.stdin.write(task.svg);
+      childProcess.stdin.end();
 
-        childProcess.stdout.on('data', function(data) {
-          try {
-            var prevBufferLength = (buffer ? buffer.length : 0),
-                newBuffer = new Buffer(prevBufferLength + data.length);
+      childProcess.stdout.on('data', function(data) {
+        try {
+          var prevBufferLength = (buffer ? buffer.length : 0),
+              newBuffer = new Buffer(prevBufferLength + data.length);
 
-            if (buffer) {
-              buffer.copy(newBuffer, 0, 0);
-            }
-
-            data.copy(newBuffer, prevBufferLength, 0);
-
-            buffer = newBuffer;
-          } catch (err) {
-            done(err, null, task.params.target);
+          if (buffer) {
+            buffer.copy(newBuffer, 0, 0);
           }
-        });
 
-        childProcess.on('close', function(code) {
-          done(null, buffer, task.params.target);
-        });
-      }
+          data.copy(newBuffer, prevBufferLength, 0);
+
+          buffer = newBuffer;
+        } catch (err) {
+          done(err, null);
+        }
+      });
+
+      childProcess.on('close', function(code) {
+        if (!code) {
+          done(null, buffer);
+        }
+      });
+
+      childProcess.on('error', function(err) {
+        if (err.code == 'ENOENT') {
+          console.log('Warning! Please install imagemagick utility. (https://www.imagemagick.org/script/binary-releases.php)');
+        }
+        done(err, null);
+      });
     } catch (err) {
-      done(err, null, task.params.target);
+      done(err, null);
     }
   }
 
