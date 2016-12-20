@@ -185,6 +185,9 @@
         done(err, null);
       });
     } catch (err) {
+      if (err.code == 'ENOENT') {
+        console.log('Warning! Please install imagemagick utility. (https://www.imagemagick.org/script/binary-releases.php)');
+      }
       done(err, null);
     }
   }
