@@ -27,7 +27,8 @@
   var defaultFontsDir = __dirname + '/../fonts';
   var promiseLibrary = typeof global.Promise == 'function' ? global.Promise : require('es6-promise').Promise;
 
-  var convertQueue = async.queue(workerForConverting, getAvailableProcessesCount());
+  var defaultParallelsTasks = 100;
+  var convertQueue = async.queue(workerForConverting, defaultParallelsTasks);
   var fonts = {};
   var defaultImageSettings = [
     {
@@ -47,13 +48,12 @@
   }
 
   function concurrency(count) {
-    var availableProcForExec = getAvailableProcessesCount();
-
-    if (count > availableProcForExec) {
-      count = availableProcForExec;
-      console.log('Warning! You can spawn only ' + availableProcForExec + ' process at a time.');
-    }
-
+    // var availableProcForExec = getAvailableProcessesCount();
+    //
+    // if (count > availableProcForExec) {
+    //   count = availableProcForExec;
+    //   console.log('Warning! You can spawn only ' + availableProcForExec + ' process at a time.');
+    // }
     convertQueue.concurrency = count;
   }
 
@@ -141,14 +141,9 @@
   }
 
   function getAvailableProcessesCount() {
-    var limit;
-    try {
-      var procMetrics = execSync('ulimit -u && ps ax | wc -l').toString().trim().split(/\n\s+/g);
-      limit = procMetrics[0] - procMetrics[1];
-    } catch (e) {
-      limit = 100;
-    }
-    return limit;
+    //nix way
+    var procMetrics = execSync('ulimit -u && ps ax | wc -l').toString().trim().split(/\n\s+/g);
+    return procMetrics[0] - procMetrics[1];
   }
 
   function workerForConverting(task, done) {
