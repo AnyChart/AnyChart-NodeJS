@@ -141,8 +141,14 @@
   }
 
   function getAvailableProcessesCount() {
-    var procMetrics = execSync('ulimit -u && ps ax | wc -l').toString().trim().split(/\n\s+/g);
-    return procMetrics[0] - procMetrics[1];
+    var limit;
+    try {
+      var procMetrics = execSync('ulimit -u && ps ax | wc -l').toString().trim().split(/\n\s+/g);
+      limit = procMetrics[0] - procMetrics[1];
+    } catch (e) {
+      limit = 100;
+    }
+    return limit;
   }
 
   function workerForConverting(task, done) {
