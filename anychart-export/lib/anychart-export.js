@@ -1,4 +1,4 @@
-(function(anychart, factory){
+(function(anychart, factory) {
   if (typeof module === 'object' && typeof module.exports === 'object') {
     if (typeof anychart.getGlobal == 'function') {
       factory.call(this, anychart);
@@ -214,10 +214,15 @@
 
     return convert.stdout;
   }
+
 //endregion utils
 
 //region --- API
   function exportTo(target, options, callback) {
+    if (!target) {
+      console.log('Can\'t read input data for exporting.');
+    }
+
     var params = getParams(arguments);
     params.target = target;
 
@@ -225,9 +230,7 @@
       if (params.type == 'svg') {
         process.nextTick(function() {
           var svg = getSvg(target, params);
-          if (callback) {
-            callback.call(null, svg);
-          }
+          callback(null, svg);
         })
       } else {
         var svg = getSvg(target, params);
@@ -284,6 +287,7 @@
   function loadFontSync(path) {
     return fonts[font.names.fullName.en.toLowerCase()] = opentype.loadSync(path);
   }
+
 //endregion
 
   loadDefaultFontsSync();

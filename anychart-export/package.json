@@ -1,5 +1,11 @@
 {
   "name": "anychart-export",
   "main": "./lib/anychart-export",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "description": "Anychart nodejs module for exporting",
+  "dependencies": {
+    "opentype.js": "0.6.6",
+    "async": "0.9.2",
+    "es6-promise": "4.0.5"
+  }
 }
