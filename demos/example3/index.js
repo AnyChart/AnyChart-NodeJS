@@ -2,7 +2,8 @@ var fs = require('fs');
 var jsdom = require('jsdom').jsdom;
 var program = require('commander');
 
-var document = jsdom('<body><div id="container"></div></body>');
+
+var document = jsdom('<body><div id="chart-container"></div></body>');
 var window = document.defaultView;
 
 var anychart = require('./../../anychart/anychart.js')(window);
@@ -37,26 +38,18 @@ fs.readFile(program.input, 'utf8', function(err, data) {
     if (chart) {
       anychart_export.exportTo(chart, 'png').then(function(data) {
         var templateFile = fs.readFileSync('./template.html', 'utf8');
+        var base64Data = data.toString('base64');
 
-        jsdom.env(
-            templateFile,
-            function (err, window) {
-              var doc = window.document;
-              var containerElement = doc.getElementById('container');
-              var imageElement = doc.createElement('image');
-              imageElement.setAttribute('src', 'data:image/png;base64,' + data.toString('base64'));
-              containerElement.appendChild(imageElement);
+        templateFile = templateFile.replace('{{chart}}', '<img class="img-responsive" src="data:image/png;base64,' + base64Data + '">');
 
-              fs.writeFile(program.output + '/' + program.name, doc.documentElement.outerHTML, function(err) {
-                if (err) {
-                  console.log(err.message);
-                } else {
-                  console.log('Written to file');
-                }
-                process.exit(0);
-              });
-            }
-        );
+        fs.writeFile(program.output + '/' + program.name, templateFile, function(err) {
+          if (err) {
+            console.log(err.message);
+          } else {
+            console.log('Written to file');
+          }
+          process.exit(0);
+        });
 
       }, function(err) {
         console.log(err.message);

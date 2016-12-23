@@ -9,7 +9,7 @@
 
   // create polar chart
   chart = anychart.polar();
-  chart.bounds(0, 0, 500, 700);
+  chart.bounds(0, 0, 600, 500);
 
   // add series
   chart.defaultSeriesType("area");
@@ -54,6 +54,6 @@
   chart.legend().position("bottom");
 
   // set container id for the chart
-  chart.container('container');
+  chart.container('chart-container');
   // initiate chart drawing
   chart.draw();

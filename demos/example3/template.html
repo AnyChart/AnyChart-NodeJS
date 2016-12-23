@@ -1,10 +1,89 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Report example</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Bootstrap 101 Template</title>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <style>
+        .img-responsive {
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body>
-    <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam blanditiis distinctio fuga harum illum incidunt ipsa provident vel voluptate voluptates. Aut illum iure non qui sed similique ut veritatis voluptas.</span><span>Assumenda at autem cum dicta dolore esse, facilis fugiat inventore labore nisi provident quibusdam velit vitae! Asperiores consectetur deleniti harum illo perspiciatis quaerat totam voluptate. Fugiat nam neque pariatur voluptas!</span><span>Alias doloribus eveniet illo maiores modi nam sed soluta vero. Accusamus animi consequuntur corporis distinctio dolor doloremque ex explicabo hic itaque nemo nihil nisi non quibusdam sapiente, temporibus. Impedit, voluptatum.</span><span>Aliquid consequatur dicta dignissimos dolore, doloremque fugiat id magni nisi porro quae quidem tempora tenetur voluptatibus. Ab, at dicta, esse explicabo, iure iusto nam quod reprehenderit sapiente sint sunt velit?</span><span>Beatae debitis, deserunt eius, et fugit ipsam laborum minima minus nam nobis numquam obcaecati, placeat quidem repellendus tempore. At blanditiis culpa dolore eveniet iure neque vitae voluptas! Asperiores dolores, veniam!</span>
-    <div id="container"></div>
+
+<div class="container">
+    <h1>Report</h1>
+    <div class="row">
+        <div class="col-md-12">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab ad atque cupiditate esse
+            exercitationem facere, illum iste itaque officiis, perspiciatis porro quaerat quisquam sequi. Architecto
+            consectetur dolorum facere ipsam quisquam. Atque consectetur corporis est eveniet fugit harum illum ipsa
+            iste laborum molestiae nostrum obcaecati officiis omnis perferendis, quidem quis repellendus sequi tempore
+            temporibus ullam! Beatae magnam nobis nostrum odio voluptatem? Accusantium beatae, dignissimos eaque enim
+            exercitationem facilis harum inventore magni necessitatibus suscipit temporibus ullam vero! Adipisci alias
+            error fuga illo magnam nostrum nulla quo vitae! Aspernatur dignissimos quis recusandae vitae! A ab
+            aspernatur deserunt dolor explicabo, facilis fugiat fugit laboriosam nulla odit omnis placeat quod rerum
+            tenetur vitae. Animi quos ratione reiciendis! Dolorem dolores magni obcaecati recusandae reprehenderit
+            tempora voluptate. Expedita nam officiis quod tenetur ullam? Aspernatur aut enim et, fugit magnam quae
+            repudiandae rerum ut! Accusantium debitis distinctio eaque eius exercitationem in laboriosam maxime, natus
+            odio omnis quo, voluptatibus.
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 text-center">
+            {{chart}}
+        </div>
+        <div class="col-md-4">
+            <blockquote>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium cumque distinctio eligendi
+                    eveniet impedit libero mollitia, nisi odio quasi qui recusandae, saepe unde vitae. Architecto ea
+                    illo
+                    ipsa iste necessitatibus. Adipisci commodi earum molestiae natus numquam odio quos voluptate?
+                    Blanditiis
+                    consectetur cumque iusto magni necessitatibus odio, placeat quas quia, recusandae reiciendis
+                    reprehenderit,
+                    sequi vero voluptate. Deleniti quis rem saepe tenetur! Consectetur excepturi hic minima nam nemo
+                    odit
+                    placeat quae velit! A doloribus dolorum earum error eum fugit ipsa nemo nesciunt nobis quas quasi
+                    rem,
+                    repellendus suscipit totam veniam voluptas voluptates.</p>
+            </blockquote>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab ad atque cupiditate esse
+            exercitationem facere, illum iste itaque officiis, perspiciatis porro quaerat quisquam sequi. Architecto
+            consectetur dolorum facere ipsam quisquam. Atque consectetur corporis est eveniet fugit harum illum ipsa
+            iste laborum molestiae nostrum obcaecati officiis omnis perferendis, quidem quis repellendus sequi tempore
+            temporibus ullam! Beatae magnam nobis nostrum odio voluptatem? Accusantium beatae, dignissimos eaque enim
+            exercitationem facilis harum inventore magni necessitatibus suscipit temporibus ullam vero! Adipisci alias
+            error fuga illo magnam nostrum nulla quo vitae! Aspernatur dignissimos quis recusandae vitae! A ab
+            aspernatur deserunt dolor explicabo, facilis fugiat fugit laboriosam nulla odit omnis placeat quod rerum
+            tenetur vitae. Animi quos ratione reiciendis! Dolorem dolores magni obcaecati recusandae reprehenderit
+            tempora voluptate. Expedita nam officiis quod tenetur ullam? Aspernatur aut enim et, fugit magnam quae
+            repudiandae rerum ut! Accusantium debitis distinctio eaque eius exercitationem in laboriosam maxime, natus
+            odio omnis quo, voluptatibus.
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
