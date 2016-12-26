@@ -31,15 +31,12 @@
   var defaultParallelsTasks = 100;
   var convertQueue = async.queue(workerForConverting, defaultParallelsTasks);
   var fonts = {};
-  var defaultImageSettings = [
-    {
-      name: 'type',
-      value: 'png'
-    }
-  ];
+  var defaultBounds = {left: 0, top: 0, width: 1024, height: 768};
 
 //region --- Utils and settings
   function isPercent(value) {
+    if (value == null)
+      return true;
     var l = value.length - 1;
     return (typeof value == 'string') && l >= 0 && value.indexOf('%', l) == l;
   }
@@ -110,7 +107,6 @@
     var options = arrLength == 1 ? undefined : callback ? args[arrLength - 2] : lastArg;
     var params = {};
 
-    extend(params, defaultImageSettings);
     if (typeof options == 'string') {
       params.type = options;
     } else if (typeof options == 'object') {
@@ -125,18 +121,38 @@
     if (typeof target == 'string') {
       svg = target;
     } else {
-      var container = target.container();
-      if (!container) {
-        console.log('Warning! Target chart has not container. Use container() method to set it.');
-        return '';
-      }
-      var bounds = target.bounds();
-      if (isPercent(bounds.left) || isPercent(bounds.top) || isPercent(bounds.width) || isPercent(bounds.height)) {
-        console.log('Warning! Bounds of chart should be set in pixels. See https://api.anychart.com/7.12.0/anychart.core.Chart#bounds how do it.');
-      }
+      var isChart = typeof target.draw == 'function';
+      var isStage = typeof target.resume == 'function';
+      var container, svgElement;
+      if (isChart) {
+        target.animation(false);
+        container = target.container();
+        if (!container) {
+          console.log('Warning! Target chart has not container. Use container() method to set it.');
+          return '';
+        }
+        var bounds = target.bounds();
+        if (isPercent(bounds.left()) || isPercent(bounds.top()) || isPercent(bounds.width()) || isPercent(bounds.height())) {
+          target.bounds(defaultBounds);
+          console.log('Warning! Bounds of chart should be set in pixels. See https://api.anychart.com/7.12.0/anychart.core.Chart#bounds how do it.');
+        }
+        target.draw();
 
-      var svgElement = container.container().getElementsByTagName('svg')[0];
-      svg = svgElement.outerHTML;
+        svgElement = container.container().getElementsByTagName('svg')[0];
+        svg = svgElement.outerHTML;
+      } else if (isStage) {
+        container = target.container();
+        if (!container) {
+          console.log('Warning! Target chart has not container. Use container() method to set it.');
+          return '';
+        }
+
+        svgElement = container.getElementsByTagName('svg')[0];
+        svg = svgElement.outerHTML;
+      } else {
+        console.log('Warning! Wrong format of incoming data.');
+        svg = '';
+      }
     }
     return svg;
   }
@@ -224,7 +240,7 @@
     }
 
     var params = getParams(arguments);
-    params.target = target;
+    // params.target = target;
 
     if (typeof callback == 'function') {
       if (params.type == 'svg') {

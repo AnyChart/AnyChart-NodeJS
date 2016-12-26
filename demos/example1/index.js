@@ -11,7 +11,7 @@ var anychart_export = require('./../../anychart-export/lib/anychart-export.js')(
 program
     .version('0.0.1')
     .option('-i, --input [value]', 'path to input data file with chart, stage or svg')
-    .option('-o, --output [value]', 'path to output image or svg file.', 'image')
+    .option('-o, --output [value]', 'path to output image or svg file.', 'image.png')
     .option('-t, --type [value]', 'type of output data.', 'png');
 
 program.parse(process.argv);
@@ -25,7 +25,7 @@ if (!program.input) {
     } else {
       var chart;
       try {
-        chart = eval(data);
+        eval(data);
       } catch (e) {
         console.log(e.message);
         chart = null;
@@ -44,12 +44,9 @@ if (!program.input) {
         }, function(err) {
           console.log(err.message);
         });
+      } else {
+        console.log('Cannot find target chart');
       }
     }
   });
 }
-
-
-
-
-
