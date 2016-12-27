@@ -30,19 +30,22 @@ var options = {
   // console.log(font.names.fullName.en);
   // console.log(font.names);
 
-  var chart = anychart.column([1, 2, 3, 4, 5]);
-  // chart.id = i;
-  chart.title()
-      .enabled(true)
-      .text('Bla-bla')
-      .fontStyle('italic')
-      .fontWeight('bold')
-      .fontFamily('Verdana')
-      .fontSize(42);
-  chart.bounds(0, 0, 500, 600);
-  chart.container('container').draw();
+  // var chart = anychart.column([1, 2, 3, 4, 5]);
+  // // chart.id = i;
+  // chart.title()
+  //     .enabled(true)
+  //     .text('Bla-bla')
+  //     .fontStyle('italic')
+  //     .fontWeight('bold')
+  //     .fontFamily('Verdana')
+  //     .fontSize(42);
+  // chart.bounds(0, 0, 500, 600);
+  // chart.container('container').draw();
+
 
   // console.log(i);
+
+var chart = fs.readFileSync('./test2.svg', 'utf-8');
 
   anychart_export.exportTo(chart, options).then(function(image) {
     // var endDate = new Date().getTime() / 1000;
@@ -60,7 +63,7 @@ var options = {
   });
 
 
-  chart.dispose();
+  // chart.dispose();
 
 // }, function(err) {
 //   console.log(err);

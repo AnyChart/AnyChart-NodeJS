@@ -18,6 +18,7 @@
   var document = anychart.getGlobal().document;
 
   var fs = require('fs');
+  var jsdom = require('jsdom');
   var spawnSync = require('child_process').spawnSync;
   var spawn = require('child_process').spawn;
   var execSync = require('child_process').execSync;
@@ -116,7 +117,19 @@
     return params;
   }
 
-  function getSvg(target, params) {
+  function fixSvg(svg) {
+    return svg
+        //jsdom bug - (https://github.com/tmpvar/jsdom/issues/620)
+        .replace(/lineargradient/g, 'linearGradient')
+        .replace(/radialgradient/g, 'radialGradient')
+        .replace(/clippath/g, 'clipPath')
+        .replace(/patternunits/g, 'patternUnits')
+        //fixes for wrong id naming
+        .replace(/(id=")#/g, '$1')
+        .replace(/(url\()##/g, '$1#');
+  }
+
+  function getSvg(target) {
     var svg;
     if (typeof target == 'string') {
       svg = target;
@@ -125,7 +138,10 @@
       var isStage = typeof target.resume == 'function';
       var container, svgElement;
       if (isChart) {
-        target.animation(false);
+        target
+            .animation(false)
+            .a11y(false);
+
         container = target.container();
         if (!container) {
           console.log('Warning! Target chart has not container. Use container() method to set it.');
@@ -154,7 +170,8 @@
         svg = '';
       }
     }
-    return svg;
+
+    return fixSvg(svg);
   }
 
   function getAvailableProcessesCount() {
@@ -245,22 +262,22 @@
     if (typeof callback == 'function') {
       if (params.type == 'svg') {
         process.nextTick(function() {
-          var svg = getSvg(target, params);
+          var svg = getSvg(target);
           callback(null, svg);
         })
       } else {
-        var svg = getSvg(target, params);
+        var svg = getSvg(target);
         convertSvgToImageData(svg, params, callback);
       }
     } else {
       return new promiseLibrary(function(resolve, reject) {
         if (params.type == 'svg') {
           process.nextTick(function() {
-            var svg = getSvg(target, params);
+            var svg = getSvg(target);
             resolve(svg);
           })
         } else {
-          var svg = getSvg(target, params);
+          var svg = getSvg(target);
           var done = function(err, image) {
             if (err) reject(err);
             else resolve(image);
@@ -273,7 +290,7 @@
 
   function exportToSync(target, options) {
     var params = getParams(arguments);
-    var svg = getSvg(target, params);
+    var svg = getSvg(target);
 
     return params.type == 'svg' ? svg : convertSvgToImageDataSync(svg, params);
   }
