@@ -18,7 +18,6 @@
   var document = anychart.getGlobal().document;
 
   var fs = require('fs');
-  var jsdom = require('jsdom');
   var spawnSync = require('child_process').spawnSync;
   var spawn = require('child_process').spawn;
   var execSync = require('child_process').execSync;

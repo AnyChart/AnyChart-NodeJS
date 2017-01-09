@@ -7,3 +7,4 @@ out/*
 *.pyc
 node_modules
 *.png
+images/
