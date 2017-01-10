@@ -7,4 +7,4 @@
 * [Technical Support](https://anychart.com/support)
 
 ## License
-[© AnyChart.com - JavaScript cha≤rts](http://www.anychart.com). Released under the [Apache 2.0 License](https://github.com/anychart-integrations/nodejs-exporting-console-utility-sample/blob/master/LICENSE).
+[© AnyChart.com - JavaScript cha≤rts](http://www.anychart.com). Released under the [Apache 2.0 License](https://github.com/AnyChart/AnyChart-NodeJS/blob/master/LICENSE).
