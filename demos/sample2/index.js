@@ -6,8 +6,8 @@ var program = require('commander');
 var document = jsdom('<body><div id="chart-container"></div></body>');
 var window = document.defaultView;
 
-var anychart = require('./../../anychart/anychart.js')(window);
-var anychart_export = require('./../../anychart-export/lib/anychart-export.js')(anychart);
+var anychart = require('anychart')(window);
+var anychart_export = require('../../lib/anychart-export.js')(anychart);
 
 program
     .version('0.0.1')
@@ -37,7 +37,7 @@ fs.readFile(program.input, 'utf8', function(err, data) {
 
     if (chart) {
       anychart_export.exportTo(chart, 'png').then(function(data) {
-        var templateFile = fs.readFileSync('./template.html', 'utf8');
+        var templateFile = fs.readFileSync('template.html', 'utf8');
         var base64Data = data.toString('base64');
 
         templateFile = templateFile.replace('{{chart}}', '<img class="img-responsive" src="data:image/png;base64,' + base64Data + '">');

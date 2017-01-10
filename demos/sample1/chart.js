@@ -18,6 +18,9 @@
 // create column chart
   chart = anychart.column3d();
 
+// chart bounds
+  chart.bounds(0, 0, 1024, 768);
+
 // set container id for the chart
   chart.container('container');
 

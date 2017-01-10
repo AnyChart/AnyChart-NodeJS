@@ -5,12 +5,12 @@ var program = require('commander');
 var d = jsdom('<body><div id="container"></div></body>');
 var w = d.defaultView;
 
-var anychart = require('./../../anychart/anychart.js')(w);
-var anychart_export = require('./../../anychart-export/lib/anychart-export.js')(anychart);
+var anychart = require('anychart')(w);
+var anychart_export = require('../../lib/anychart-export.js')(anychart);
 
 program
     .version('0.0.1')
-    .option('-i, --input [value]', 'path to input data file with chart, stage or svg')
+    .option('-i, --input [value]', 'path to input data file with chart, stage or svg', 'chart.js')
     .option('-o, --output [value]', 'path to output image or svg file.', 'image')
     .option('-t, --type [value]', 'type of output data.', 'png');
 
@@ -37,7 +37,7 @@ if (!program.input) {
             if (err) {
               console.log(err.message);
             } else {
-              console.log('Written to file');
+              console.log('Written to ' + program.output + '.' + program.type + ' file');
             }
             process.exit(0);
           });

@@ -1,21 +1,16 @@
 {
   "name": "anychart-export",
-  "main": "./lib/anychart-export",
+  "main": "lib/anychart-export.js",
   "version": "1.0.0",
-  "description": "Anychart nodejs module for exporting",
-  "title": "Anychart Export",
+  "description": "AnyChart NodeJS module for exporting",
   "homepage": "https://github.com/AnyChart/AnyChart-NodeJS",
+  "license": "Apache-2.0",
   "keywords": [
     "anychart",
     "export",
     "javascript",
     "library"
   ],
-  "readme": "ERROR: No README data found!",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AnyChart/AnyChart-NodeJS.git"
-  },
   "dependencies": {
     "opentype.js": "^0.6.6",
     "async": "^0.9.2",

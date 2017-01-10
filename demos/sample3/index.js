@@ -1,15 +1,14 @@
 var fs = require('fs');
 var jsdom = require('jsdom').jsdom;
-var program = require('commander');
 var express = require('express');
 var bodyParser = require('body-parser');
 
 var d = jsdom('<body><div id="chart-container"></div></body>');
 var window = d.defaultView;
 
-var anychart = require('./../../anychart/anychart.js')(window);
-var anychart_export = require('./../../anychart-export/lib/anychart-export.js')(anychart);
-var indexTemplate = fs.readFileSync('./template.html', 'utf-8');
+var anychart = require('anychart')(window);
+var anychart_export = require('../../lib/anychart-export.js')(anychart);
+var indexTemplate = fs.readFileSync('template.html', 'utf-8');
 
 var app = express();
 app.use(bodyParser.json());       // to support JSON-encoded bodies
