@@ -46,7 +46,7 @@ fs.readFile(program.input, 'utf8', function(err, data) {
           if (err) {
             console.log(err.message);
           } else {
-            console.log('Written to file');
+            console.log('Written to ' + program.output + '/' + program.name + ' file');
           }
           process.exit(0);
         });
