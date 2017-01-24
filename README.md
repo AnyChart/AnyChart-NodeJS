@@ -73,11 +73,13 @@ $ node index.js
 #### `exportTo(target, options, callback):Promise`
 Generate an image asynchronously.
 Parameters:
+
 Name | Type | Description
- --- | --- | ---
+--- | --- | ---
 `target` | SVG string, Chart or Stage instance | Input data.
 `outputType` | string | Output type, possible values are: svg, jpg, png.
 `callback` | Function | The result callback.
+
 Returns:
 Promise if no callback passed.
 
