@@ -25,7 +25,8 @@ You can install AnyChart NodyJS export module using **npm**, **bower** or **yarn
 * `yarn add anychart-export`
 
 AnyChart NodeJS module require [ImageMagic](https://www.imagemagick.org) to build JPG and PNG images.
-Please, visit Image Magic [install](https://www.imagemagick.org/script/index.php) page for detaild
+Please, visit Image Magic [install](https://www.imagemagick.org/script/index.php) page for detaild.
+Note for windows users, you have to create environment variable as described at [Advanced Windows Installation](https://www.imagemagick.org/script/advanced-windows-installation.php) article.
 
 ## Quick start 
 To generate JPG image of the simple Pie Chart, create index.js file with following content:
@@ -45,6 +46,7 @@ var anychartExport = require('anychart-export')(anychart);
 // create and draw Pie Chart to the jsdom defaultView 
 var chart = anychart.pie([10, 20, 7, 18, 30]);
 chart.container('container');
+chart.bounds(0, 0, 800, 600);
 chart.draw();
 
 // generate JPG image and save to a file
