@@ -71,13 +71,15 @@ $ node index.js
 
 ## AnyChart Export Module API
 #### `exportTo(target, options, callback):Promise`
-Asynchronously generate an image using passed chart or stage instance.
-Input parameters:
-Parameter Name | Type | Description
---- | --- | ---
-`target` | SVG string, Chart, Stage | Input data.
+Generate an image asynchronously.
+Parameters:
+Name | Type | Description
+ --- | --- | ---
+`target` | SVG string, Chart or Stage instance | Input data.
 `outputType` | string | Output type, possible values are: svg, jpg, png.
-`callback` | Function | Async Callback function that contains result.
+`callback` | Function | The result callback.
+Returns:
+Promise if no callback passed.
 
 #### `exportToSync(target, options):Object`
 Synchronous image generation. Returns converted image.
