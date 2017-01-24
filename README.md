@@ -1,11 +1,9 @@
 [<img src="https://cdn.anychart.com/images/logo-transparent-segoe.png?2" width="234px" alt="AnyChart - Robust JavaScript/HTML5 Chart library for any project">](https://anychart.com)
 
-AnyChart NodeJS export module.
+# AnyChart NodeJS module.
 
-=========
-
-NodeJS module that provides an ability to generate SVG, JPG and PNG images 
-from AnyCharts charts.
+AnyChart NodeJS module provides an easy way to generate SVG, JPG and PNG images of the charts.
+It perfectyly suits to email reporting systems and social networks sharing applications.
 
 ## Table of Contents
 
@@ -20,36 +18,14 @@ from AnyCharts charts.
 * [License](#license)
 
 ## Download and install
-
-First of all, you have to install [ImageMagic](https://www.imagemagick.org/script/index.php)
-util for your platform. AnyChart NodeJS export module uses it to generate images.
-
-#### Package managers
-
 You can install AnyChart NodyJS export module using **npm**, **bower** or **yarn**:
 
 * `npm install anychart-export`
 * `bower install anychart-export`
 * `yarn add anychart-export`
 
-## General Notes
-
-* It is a module, not a server. It means that this solution 
-can be easily integrated in any NodeJS project.
-* Module is independent, so it doesn't require PhantomJS, 
-Graphical Environment or somethin like that.
-* It's pretty fast.
-
-
-
-## Usage Notes 
-Usage of this module simplifies simplifies implementation of solutions like:
-* Your own export server.
-* Console chart-to-image export util.
-* Reports server.
-* Reports generation console util.
-* etc...
-
+AnyChart NodeJS module require [ImageMagic](https://www.imagemagick.org) to build JPG and PNG images.
+Please, visit Image Magic [install](https://www.imagemagick.org/script/index.php) page for detaild
 
 ## Quick start 
 Console export sample is available [here](https://github.com/anychart-integrations/nodejs-exporting-console-utility-sample). 
