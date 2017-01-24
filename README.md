@@ -72,7 +72,7 @@ $ node index.js
 ## AnyChart Export Module API
 #### `exportTo(target, options, callback):Promise`
 Generate an image asynchronously.  
-Parameters:  
+**Parameters:**  
 
 Name | Type | Description
 --- | --- | ---
