@@ -68,20 +68,15 @@ $ node index.js
 >> Complete
 ```
 
-Another anychart-export integrations can be found in [Anychart Integrations Repo](https://github.com/AnyChart-Integrations)
-
-
 
 ## AnyChart Export Module API
 #### `exportTo(target, options, callback):Promise`
-Asynchronous image generation. Gets result in resulting callback, returns Promise.
-
+Asynchronously generate an image using passed chart or stage instance.
 Input parameters:
-
 Parameter Name | Type | Description
 --- | --- | ---
-`target` | SVG, Chart, Stage | Instance of what to export.
-`options` | Object, string | Options object of string that represents export image type.
+`target` | SVG string, Chart, Stage | Input data.
+`outputType` | string | Output type, possible values are: svg, jpg, png.
 `callback` | Function | Async Callback function that contains result.
 
 #### `exportToSync(target, options):Object`
