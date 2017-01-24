@@ -28,24 +28,44 @@ AnyChart NodeJS module require [ImageMagic](https://www.imagemagick.org) to buil
 Please, visit Image Magic [install](https://www.imagemagick.org/script/index.php) page for detaild
 
 ## Quick start 
-Console export sample is available [here](https://github.com/anychart-integrations/nodejs-exporting-console-utility-sample). 
-To run an image console export, exec index.js file with nodejs.
-
-```
-$ node index.js -i myChart.js -o myImage -t jpg
-Written to myImage.jpg file  
-```
-
-In this sample anychart-export module can be used in simple way like this:
+To generate JPG image of the simple Pie Chart, create index.js file with following content:
 ```javascript
+// require file system and jsdom
 var fs = require('fs');
 var jsdom = require('jsdom').jsdom;
 
+// create default jsdom view
 var d = jsdom('<body><div id="container"></div></body>');
 var w = d.defaultView;
 
+// require anychart and anychart export modules
 var anychart = require('anychart')(w);
-var anychart_export = require('anychart-export')(anychart);
+var anychartExport = require('anychart-export')(anychart);
+
+// create and draw Pie Chart to the jsdom defaultView 
+var chart = anychart.pie([10, 20, 7, 18, 30]);
+chart.container('container');
+chart.draw();
+
+// generate JPG image and save to a file
+anychartExport.exportTo(chart, 'jpg').then(function(image) {
+  fs.writeFile('anychart.jpg', image, function(fsWriteError) {
+    if (fsWriteError) {
+      console.log(fsWriteError.message);
+    } else {
+      console.log('Complete');
+    }
+    process.exit(0);
+  });
+}, function(generationError) {
+  console.log(generationError.message);
+});
+```
+
+Run the following command in command line
+```
+$ node index.js
+>> Complete
 ```
 
 Another anychart-export integrations can be found in [Anychart Integrations Repo](https://github.com/AnyChart-Integrations)
