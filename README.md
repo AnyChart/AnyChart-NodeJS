@@ -80,56 +80,62 @@ Name | Type | Description
 `outputType` | string | Output type, possible values are: svg, jpg, png.
 `callback` | Function | The result callback.
 
-**Returns:**  
+**Returns:**  
 Promise if no callback passed.
 
-#### `exportToSync(target, options):Object`
-Synchronous image generation. Returns converted image.
+### `exportToSync(target, options):Object`
+Generate an image synchronously.  
 
-Input parameters:
+**Parameters:**
 
-Parameter Name | Type | Description
+Name | Type | Description
 --- | --- | ---
-`target` | SVG, Chart, Stage | Instance of what to export.
-`options` | Object, string | Options object of string that represents export image type.
+`target` | SVG string, Chart or Stage instance | Instance of what to export.
+`outputType` | string | Output type, possible values are: svg, jpg, png.
+
+**Returns:**  
+ArrayBuffer
+
+### `loadFont(path, callback):Promise`
+Loads the specified font asynchronously.
+
+**Parameters:**
+
+Name | Type | Description
+--- | --- | ---
+`path` | string | Path to the font.
+`callback` | Function | The result callback.
+
+**Returns:**  
+Promise if no callback passed.
 
 
-#### `loadFont(path, callback):Promise`
-Asynchronously loads the specified font. Gets result with font object, returns Promise.
+### `loadFontSync(path):Object`
+Loads the specified font synchronously.
 
-Input parameters:
+**Parameters:**
 
-Parameter Name | Type | Description
+Name | Type | Description
 --- | --- | ---
 `path` | string | Path to font.
-`callback` | Function | Async Callback function that contains result.
+**Returns:**  
+Object
 
-
-#### `loadFontSync(path):Object`
-Synchronously loads the specified font. Returns the font object.
-
-Input parameters:
-
-Parameter Name | Type | Description
---- | --- | ---
-`path` | string | Path to font.
-
-
-#### `loadDefaultFonts(callback):Promise`
+### `loadDefaultFonts(callback):Promise`
 Asynchronously loads default fonts. Gets result as array of resulting
 font objects that are available in callback, returns Promise.
 
-Input parameters:
+**Parameters:**
 
-Parameter Name | Type | Description
+Name | Type | Description
 --- | --- | ---
-`callback` | Function | Async Callback function that contains result.
+`callback` | Function | The result callback.
 
 
-#### `loadDefaultFontsSync():Array.<Object>`
-Synchronously loads default fonts. Gets result as array of resulting
-font objects, returns Promise.
-No input parameters are provided.
+### `loadDefaultFontsSync():Array.<Object>`
+Loads default fonts synchronously. 
+**Returns:**  
+Array.<Object>
  
  
 ## Demos overview 
