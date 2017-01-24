@@ -12,7 +12,7 @@ It perfectyly suits to email reporting systems and social networks sharing appli
 * [Usage Notes](#usage-notes)
 * [Quick start](#quick-start)
 * [AnyChart Export Module API](#anychart-export-module-api)
-* [Demos Overview](#demos-overview)
+* [Examples](#examples)
 * [Contacts](#contacts)
 * [Links](#links)
 * [License](#license)
@@ -133,15 +133,17 @@ Name | Type | Description
 
 
 ### `loadDefaultFontsSync():Array.<Object>`
-Loads default fonts synchronously. 
+Loads default fonts synchronously.  
 **Returns:**  
 Array.<Object>
  
  
-## Demos overview 
-* [NodeJS utility for reports generation](https://github.com/anychart-integrations/nodejs-reports-generation-console-utilily-sample)
-* [NodeJS export server](https://github.com/anychart-integrations/nodejs-export-server-sample)
-* [NodeJS exporting utility](https://github.com/anychart-integrations/nodejs-exporting-console-utility-sample)
+## Examples 
+Please, take a look at ready to use examples.
+* [Report Generation utility](https://github.com/anychart-integrations/nodejs-reports-generation-console-utilily-sample)
+* [Image Generation utility](https://github.com/anychart-integrations/nodejs-exporting-console-utility-sample)
+* [Export Server application](https://github.com/anychart-integrations/nodejs-export-server-sample)
+
 
 
 ## Contacts
