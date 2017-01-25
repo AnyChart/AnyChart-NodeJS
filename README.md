@@ -2,8 +2,8 @@
 
 # AnyChart NodeJS module.
 
-AnyChart NodeJS module provides an easy way to generate SVG, JPG and PNG images of the charts.
-It perfectyly suits to email reporting systems and social networks sharing applications.
+AnyChart NodeJS module provides an easy way to generate SVG, JPG and PNG images of the charts on the server side.
+Consider it for reporting systems that send charts by email or social networks sharing applications.
 
 ## Table of Contents
 
@@ -24,12 +24,12 @@ You can install AnyChart NodyJS export module using **npm**, **bower** or **yarn
 * `bower install anychart-export`
 * `yarn add anychart-export`
 
-AnyChart NodeJS module require [ImageMagic](https://www.imagemagick.org) to build JPG and PNG images.
-Please, visit Image Magic [install](https://www.imagemagick.org/script/index.php) page for detaild.
-Note for windows users, you have to create environment variable as described at [Advanced Windows Installation](https://www.imagemagick.org/script/advanced-windows-installation.php) article.
+AnyChart NodeJS module requires [ImageMagic](https://www.imagemagick.org) to create JPG and PNG images.
+Visit Image Magic [install](https://www.imagemagick.org/script/index.php) page for details.
+**Note for Windows users:** you have to create environment variable as described in [Image Magic: Advanced Windows Installation](https://www.imagemagick.org/script/advanced-windows-installation.php) article.
 
 ## Quick start 
-To generate JPG image of the simple Pie Chart, create index.js file with following content:
+To generate JPG image a chart, create index.js file with the following content:
 ```javascript
 // require file system and jsdom
 var fs = require('fs');
@@ -43,13 +43,13 @@ var w = d.defaultView;
 var anychart = require('anychart')(w);
 var anychartExport = require('anychart-export')(anychart);
 
-// create and draw Pie Chart to the jsdom defaultView 
+// create and a chart to the jsdom defaultView 
 var chart = anychart.pie([10, 20, 7, 18, 30]);
 chart.container('container');
 chart.bounds(0, 0, 800, 600);
 chart.draw();
 
-// generate JPG image and save to a file
+// generate JPG image and save it to a file
 anychartExport.exportTo(chart, 'jpg').then(function(image) {
   fs.writeFile('anychart.jpg', image, function(fsWriteError) {
     if (fsWriteError) {
@@ -64,7 +64,7 @@ anychartExport.exportTo(chart, 'jpg').then(function(image) {
 });
 ```
 
-Run the following command in command line
+Run the following command in the command line:
 ```
 $ node index.js
 >> Complete
@@ -78,7 +78,7 @@ Generate an image asynchronously.
 
 Name | Type | Description
 --- | --- | ---
-`target` | SVG string, Chart or Stage instance | Input data to export.
+`target` | SVG string, a chart or a stage instance | Object to be exported.
 `outputType` | string | Output type, possible values are: svg, jpg, png.
 `callback` | Function | The result callback.
 
@@ -92,7 +92,7 @@ Generate an image synchronously.
 
 Name | Type | Description
 --- | --- | ---
-`target` | SVG string, Chart or Stage instance | Instance of what to export.
+`target` | SVG string, a chart or a stage instance | Object to be exported.
 `outputType` | string | Output type, possible values are: svg, jpg, png.
 
 **Returns:**  
@@ -124,8 +124,8 @@ Name | Type | Description
 Object
 
 ### `loadDefaultFonts(callback):Promise`
-Asynchronously loads default fonts. Gets result as array of resulting
-font objects that are available in callback, returns Promise.
+Asynchronously loads default fonts. Gets result as an array of resulting
+font objects that are available in the callback, returns Promise.
 
 **Parameters:**
 
@@ -138,15 +138,12 @@ Name | Type | Description
 Loads default fonts synchronously.  
 **Returns:**  
 Array.<Object>
- 
- 
+
 ## Examples 
-Please, take a look at ready to use examples.
-* [Report Generation utility](https://github.com/anychart-integrations/nodejs-reports-generation-console-utilily-sample)
-* [Image Generation utility](https://github.com/anychart-integrations/nodejs-exporting-console-utility-sample)
-* [Export Server application](https://github.com/anychart-integrations/nodejs-export-server-sample)
-
-
+Please, take a look at examples:
+* [Report Generation Utility](https://github.com/anychart-integrations/nodejs-reports-generation-console-utilily-sample)
+* [Image Generation Utility](https://github.com/anychart-integrations/nodejs-exporting-console-utility-sample)
+* [Export Server Application](https://github.com/anychart-integrations/nodejs-export-server-sample)
 
 ## Contacts
 
@@ -172,15 +169,3 @@ Please, take a look at ready to use examples.
 ## License
 
 [© AnyChart.com - JavaScript charts](http://www.anychart.com). All rights reserved.
-
-
-
-
-
-
-
-
-
-
-
-
