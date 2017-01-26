@@ -24,9 +24,6 @@
 // set container id for the chart
   chart.container('container');
 
-// turn on chart animation
-  chart.animation(true);
-
 // set chart title text settings
   chart.title('Top 7 Products by Revenue in two Regions');
   chart.title().padding([0, 0, 10, 0]);
