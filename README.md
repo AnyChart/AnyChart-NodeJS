@@ -141,9 +141,9 @@ Array.<Object>
 
 ## Examples 
 Please, take a look at examples:
-* [Report Generation Utility](https://github.com/anychart-integrations/nodejs-reports-generation-console-utilily-sample)
-* [Image Generation Utility](https://github.com/anychart-integrations/nodejs-exporting-console-utility-sample)
-* [Export Server Application](https://github.com/anychart-integrations/nodejs-export-server-sample)
+* [Report Generation Utility](https://github.com/anychart-integrations/nodejs-report-generation-utilily)
+* [Image Generation Utility](https://github.com/anychart-integrations/nodejs-image-generation-utility)
+* [Export Server Application](https://github.com/anychart-integrations/nodejs-export-server-application)
 
 ## Contacts
 
