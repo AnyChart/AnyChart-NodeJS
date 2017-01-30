@@ -20,9 +20,9 @@ Consider it for reporting systems that send charts by email or social networks s
 ## Download and install
 You can install AnyChart NodyJS export module using **npm**, **bower** or **yarn**:
 
-* `npm install anychart-export`
-* `bower install anychart-export`
-* `yarn add anychart-export`
+* `npm install anychart-nodejs`
+* `bower install anychart-nodejs`
+* `yarn add anychart-nodejs`
 
 AnyChart NodeJS module requires [ImageMagic](https://www.imagemagick.org) to create JPG and PNG images.
 Visit Image Magic [install](https://www.imagemagick.org/script/index.php) page for details.
@@ -41,7 +41,7 @@ var w = d.defaultView;
 
 // require anychart and anychart export modules
 var anychart = require('anychart')(w);
-var anychartExport = require('anychart-export')(anychart);
+var anychartExport = require('anychart-nodejs')(anychart);
 
 // create and a chart to the jsdom defaultView 
 var chart = anychart.pie([10, 20, 7, 18, 30]);
