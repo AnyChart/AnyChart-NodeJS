@@ -61,6 +61,7 @@ anychartExport.exportTo(chart, 'jpg').then(function(image) {
   });
 }, function(generationError) {
   console.log(generationError.message);
+  process.exit(1);
 });
 ```
 
