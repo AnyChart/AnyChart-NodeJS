@@ -8,10 +8,8 @@ Consider it for reporting systems that send charts by email or social networks s
 ## Table of Contents
 
 * [Download and install](#download-and-install)
-* [General Notes](#general-notes)
-* [Usage Notes](#usage-notes)
 * [Quick start](#quick-start)
-* [AnyChart Export Module API](#anychart-export-module-api)
+* [Export Module API](#export-module-api)
 * [Examples](#examples)
 * [Contacts](#contacts)
 * [Links](#links)
@@ -72,7 +70,7 @@ $ node index.js
 ```
 
 
-## Module API
+## Export Module API
 ### `exportTo(target, options, callback):Promise`
 Generate an image asynchronously.  
 **Parameters:**  
