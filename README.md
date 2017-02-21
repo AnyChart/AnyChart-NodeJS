@@ -167,4 +167,4 @@ Please, take a look at examples:
 
 ## License
 
-[© AnyChart.com - JavaScript charts](http://www.anychart.com). All rights reserved.
+[© AnyChart.com - JavaScript charts](http://www.anychart.com). AnyChart NodeJS module is released under the [Apache 2.0 License](https://github.com/AnyChart/AnyChart-NodeJS/blob/master/LICENSE).
