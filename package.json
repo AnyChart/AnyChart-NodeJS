@@ -31,12 +31,12 @@
     "es6-promise": "^4.0.5",
     "fontfaceobserver": "^2.0.13",
     "gm": "^1.23.0",
+    "js-gc": "^0.0.3",
     "jsdom": "^9.9.1",
     "mime-types": "^2.1.16",
     "opentype.js": "^0.6.6",
     "request": "^2.81.0",
     "vm2": "^3.4.6",
-    "xmldom": "^0.1.27",
-    "js-gc": "^0.0.3"
+    "xmldom": "^0.1.27"
   }
 }
