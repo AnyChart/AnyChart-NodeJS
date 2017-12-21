@@ -28,7 +28,7 @@
     "opentype.js": "^0.6.6",
     "async": "^0.9.2",
     "es6-promise": "^4.0.5",
-    "anychart": "7.14.0",
+    "anychart": "8.0.0-dev-preview",
     "jsdom": "^9.9.1"
   }
 }
