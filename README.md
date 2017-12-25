@@ -22,12 +22,28 @@ You can install AnyChart NodeJS export module using **npm**, **bower** or **yarn
 * `bower install anychart-nodejs`
 * `yarn add anychart-nodejs`
 
-AnyChart NodeJS module requires [ImageMagic](https://www.imagemagick.org) to create JPG and PNG images.
-Visit Image Magic [install](https://www.imagemagick.org/script/index.php) page for details.
-**Note for Windows users:** you have to create environment variable as described in [Image Magic: Advanced Windows Installation](https://www.imagemagick.org/script/advanced-windows-installation.php) article.
+AnyChart NodeJS module requires [ImageMagick](https://www.imagemagick.org/script/index.php) and [librsvg](https://github.com/GNOME/librsvg) to create images. 
+
+Install ImageMagick and librsvg on Linux:
+
+```
+apt-get install imagemagick librsvg2-dev
+```
+
+Install ImageMagick and librsvg on Mac OS X
+
+```
+brew install imagemagick librsvg
+```
+
+Install ImageMagick and librsvg on Windows:
+
+- [imagemagick](https://www.imagemagick.org/script/download.php)<br>
+- [GTK+ bundle](http://win32builder.gnome.org/gtk+-bundle_3.6.4-20131201_win64.zip)<br>
+- [RSVG lib](https://downloads.sourceforge.net/project/tumagcc/converters/rsvg-convert.exe?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Ftumagcc%2Ffiles%2Frsvg-convert.exe%2Fdownload&ts=1500995628&use_mirror=netix)
 
 ## Quick start 
-To generate JPG image a chart, create index.js file with the following content:
+To generate JPG image a chart from chart instance, create index.js file with the following content:
 ```javascript
 // require file system and jsdom
 var fs = require('fs');
@@ -43,8 +59,8 @@ var anychartExport = require('anychart-nodejs')(anychart);
 
 // create and a chart to the jsdom defaultView 
 var chart = anychart.pie([10, 20, 7, 18, 30]);
-chart.container('container');
 chart.bounds(0, 0, 800, 600);
+chart.container('container');
 chart.draw();
 
 // generate JPG image and save it to a file
@@ -55,11 +71,40 @@ anychartExport.exportTo(chart, 'jpg').then(function(image) {
     } else {
       console.log('Complete');
     }
-    process.exit(0);
   });
 }, function(generationError) {
   console.log(generationError.message);
-  process.exit(1);
+});
+```
+
+Run the following command in the command line:
+```
+$ node index.js
+>> Complete
+```
+
+To generate PDF image a chart from Java Script string, create index.js file with the following content:
+```javascript
+// require file system and jsdom
+var fs = require('fs');
+
+// require only anychart export module
+var anychartExport = require('anychart-nodejs');
+
+// define javascript string that represent code of chart creating
+var chart = "var chart = anychart.pie([10, 20, 7, 18, 30]); chart.bounds(0, 0, 800, 600); chart.container('container'); chart.draw()";
+
+// generate PDF image and save it to a file
+anychartExport.exportTo(chart, 'pdf').then(function(image) {
+  fs.writeFile('anychart.pdf', image, function(fsWriteError) {
+    if (fsWriteError) {
+      console.log(fsWriteError.message);
+    } else {
+      console.log('Complete');
+    }
+  });
+}, function(generationError) {
+  console.log(generationError.message);
 });
 ```
 
@@ -77,8 +122,12 @@ Generate an image asynchronously.
 
 Name | Type | Description
 --- | --- | ---
-`target` | SVG string, a chart or a stage instance | Object to be exported.
-`outputType` | string | Output type, possible values are: svg, jpg, png.
+`target` | SVG string, XML string, Java Script string, a chart or a stage instance | **required** Data to be exported.
+`outputType` | string | Output type, possible values are: svg, jpg, png, pdf. Default: 'jpg'
+`dataType` | string | Type of target.
+`document` | Document | Document object where was rendered chart or should be.
+`containerId` | string | Id of container.
+`resources` | Array.\<string\> | Links to external resources.
 `callback` | Function | The result callback.
 
 **Returns:**  
@@ -91,8 +140,12 @@ Generate an image synchronously.
 
 Name | Type | Description
 --- | --- | ---
-`target` | SVG string, a chart or a stage instance | Object to be exported.
-`outputType` | string | Output type, possible values are: svg, jpg, png.
+`target` | SVG string, XML string, Java Script string, a chart or a stage instance | **required** Data to be exported.
+`outputType` | string | Output type, possible values are: svg, jpg, png, pdf.
+`dataType` | string | Type of target.
+`document` | Document | Document object where was rendered chart or should be.
+`containerId` | string | Id of container.
+`resources` | Array.\<string\> | Links to external resources.
 
 **Returns:**  
 ArrayBuffer
@@ -122,23 +175,47 @@ Name | Type | Description
 **Returns:**  
 Object
 
-### `loadDefaultFonts(callback):Promise`
-Asynchronously loads default fonts. Gets result as an array of resulting
-font objects that are available in the callback, returns Promise.
-
-**Parameters:**
-
-Name | Type | Description
---- | --- | ---
-`callback` | Function | The result callback.
-
-
-### `loadDefaultFontsSync():Array.<Object>`
-Loads default fonts synchronously.  
-**Returns:**  
-Array.<Object>
-
 ## Examples 
+Generating PDF image a chart with that requires external resources:
+```javascript
+// require file system and jsdom
+var fs = require('fs');
+
+// require only anychart export module
+var anychartExport = require('anychart-nodejs');
+
+// define javascript string that represent code of chart creating
+var chart = "var chart = anychart.map(); chart.bounds(0, 0, 800, 600); chart.geoData('anychart.maps.united_states_of_america'); chart.container('container'); chart.draw()";
+
+// exporting parameters
+var params = {
+	outputType: 'pdf',
+	resources: [
+		'https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.15/proj4.js',
+		'https://cdn.anychart.com/releases/v8/geodata/countries/united_states_of_america/united_states_of_america.js'
+	]
+};
+
+// generate PDF image and save it to a file
+anychartExport.exportTo(chart, params).then(function(image) {
+  fs.writeFile('anychart.pdf', image, function(fsWriteError) {
+    if (fsWriteError) {
+      console.log(fsWriteError.message);
+    } else {
+      console.log('Complete');
+    }
+  });
+}, function(generationError) {
+  console.log(generationError.message);
+});
+```
+
+Run the following command in the command line:
+```
+$ node index.js
+>> Complete
+```
+
 Please, take a look at examples:
 * [Report Generation Utility](https://github.com/anychart-integrations/nodejs-report-generation-utilily)
 * [Image Generation Utility](https://github.com/anychart-integrations/nodejs-image-generation-utility)

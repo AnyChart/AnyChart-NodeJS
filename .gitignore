@@ -8,3 +8,4 @@ out/*
 node_modules
 *.png
 images/
+package-lock.json
