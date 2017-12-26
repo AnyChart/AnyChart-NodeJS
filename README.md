@@ -253,6 +253,6 @@ Please, take a look at examples:
 [npm-image]: https://img.shields.io/npm/v/anychart-nodejs.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/anychart-nodejs
 [downloads-image]: https://img.shields.io/npm/dm/anychart-nodejs.svg?style=flat-square
-[downloads-url]: https://www.npmjs.com/package/anycahrt-nodejs
+[downloads-url]: https://www.npmjs.com/package/anychart-nodejs
 [quality-image]: http://npm.packagequality.com/shield/anychart-nodejs.svg?style=flat-square
 [quality-url]: http://packagequality.com/#?package=anycahrt-nodejs
