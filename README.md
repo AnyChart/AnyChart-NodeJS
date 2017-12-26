@@ -47,17 +47,19 @@ To generate JPG image a chart from chart instance, create index.js file with the
 ```javascript
 // require file system and jsdom
 var fs = require('fs');
-var jsdom = require('jsdom').jsdom;
 
-// create default jsdom view
-var d = jsdom('<body><div id="container"></div></body>');
-var w = d.defaultView;
+//require jsdom class (important - jsdom package 11.5.1 or later version)
+var JSDOM = require('jsdom').JSDOM;
+
+// create window
+var window = (new JSDOM('<body><div id="container"></div></body>', {runScripts: "dangerously"})).window;
 
 // require anychart and anychart export modules
-var anychart = require('anychart')(w);
+var anychart = require('anychart')(window);
 var anychartExport = require('anychart-nodejs')(anychart);
 
-// create and a chart to the jsdom defaultView 
+// create and a chart to the jsdom window.
+// chart creating should be called only right after anychart-nodejs module requiring
 var chart = anychart.pie([10, 20, 7, 18, 30]);
 chart.bounds(0, 0, 800, 600);
 chart.container('container');
@@ -67,13 +69,13 @@ chart.draw();
 anychartExport.exportTo(chart, 'jpg').then(function(image) {
   fs.writeFile('anychart.jpg', image, function(fsWriteError) {
     if (fsWriteError) {
-      console.log(fsWriteError.message);
+      console.log(fsWriteError);
     } else {
       console.log('Complete');
     }
   });
 }, function(generationError) {
-  console.log(generationError.message);
+  console.log(generationError);
 });
 ```
 
@@ -98,13 +100,13 @@ var chart = "var chart = anychart.pie([10, 20, 7, 18, 30]); chart.bounds(0, 0, 8
 anychartExport.exportTo(chart, 'pdf').then(function(image) {
   fs.writeFile('anychart.pdf', image, function(fsWriteError) {
     if (fsWriteError) {
-      console.log(fsWriteError.message);
+      console.log(fsWriteError);
     } else {
       console.log('Complete');
     }
   });
 }, function(generationError) {
-  console.log(generationError.message);
+  console.log(generationError);
 });
 ```
 
@@ -200,13 +202,13 @@ var params = {
 anychartExport.exportTo(chart, params).then(function(image) {
   fs.writeFile('anychart.pdf', image, function(fsWriteError) {
     if (fsWriteError) {
-      console.log(fsWriteError.message);
+      console.log(fsWriteError);
     } else {
       console.log('Complete');
     }
   });
 }, function(generationError) {
-  console.log(generationError.message);
+  console.log(generationError);
 });
 ```
 
