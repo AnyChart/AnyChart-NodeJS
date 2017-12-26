@@ -4,6 +4,15 @@ var chai = require('chai');
 const expect = chai.expect;
 var app = require('../lib/anychart-node');
 
+function partial(fn, var_args) {
+  var args = Array.prototype.slice.call(arguments, 1);
+  return function() {
+    var newArgs = args.slice();
+    newArgs.push.apply(newArgs, arguments);
+    return fn.apply(this, newArgs);
+  };
+}
+
 describe('Exporting', function() {
   describe('exportTo', function() {
     describe('Second param as string (output type) | to pdf', function() {
@@ -542,12 +551,12 @@ describe('Exporting', function() {
         });
       });
 
-      it('dif containers', function(done) {
-        this.timeout(10000);
-
-        var data;
+      it('different containers', function(done) {
+        this.timeout(20000);
 
         var i = 0;
+        var chartsCount = 20;
+
         var exit = function(index, data) {
           var pathToImg = './test/img/'+ index + '.png';
           var dirName = path.dirname(pathToImg);
@@ -561,99 +570,29 @@ describe('Exporting', function() {
           console.log(index);
 
           i++;
-          if (i === 10)
+          if (i === chartsCount)
             done();
         };
 
-        data = '{"chart":{"type":"pie","data":[1], "labels":{"format":"{%value}"}}}';
-        app.exportTo(data, {outputType: 'png', containerId: 'container' + 1}, function(err, image) {
+        var getData = function(index) {
+          return '{"chart":{"type":"pie","data":[' + index + '], "labels":{"format":"{%value}"}}}';
+        };
+
+        var cb = function(index, err, image) {
           expect(image).to.be.instanceof(Buffer);
           expect(err).to.be.null;
 
-          var index = 1;
           exit(index, image);
-        });
+        };
 
-        data = '{"chart":{"type":"pie","data":[2], "labels":{"format":"{%value}"}}}';
-        app.exportTo(data, {outputType: 'png', containerId: 'container' + 2}, function(err, image) {
-          expect(image).to.be.instanceof(Buffer);
-          expect(err).to.be.null;
+        var execUnit = function(index) {
+          var cb_ = partial(cb, index);
+          app.exportTo(getData(index), {outputType: 'png', containerId: 'container' + index}, cb_);
+        };
 
-          var index = 2;
-          exit(index, image);
-        });
-
-        data = '{"chart":{"type":"pie","data":[3], "labels":{"format":"{%value}"}}}';
-        app.exportTo(data, {outputType: 'png', containerId: 'container' + 3}, function(err, image) {
-          expect(image).to.be.instanceof(Buffer);
-          expect(err).to.be.null;
-
-          var index = 3;
-          exit(index, image);
-        });
-
-        data = '{"chart":{"type":"pie","data":[4], "labels":{"format":"{%value}"}}}';
-        app.exportTo(data, {outputType: 'png', containerId: 'container' + 4}, function(err, image) {
-          expect(image).to.be.instanceof(Buffer);
-          expect(err).to.be.null;
-
-          var index = 4;
-          exit(index, image);
-        });
-
-        data = '{"chart":{"type":"pie","data":[5], "labels":{"format":"{%value}"}}}';
-        app.exportTo(data, {outputType: 'png', containerId: 'container' + 5}, function(err, image) {
-          expect(image).to.be.instanceof(Buffer);
-          expect(err).to.be.null;
-
-          var index = 5;
-          exit(index, image);
-        });
-
-        data = '{"chart":{"type":"pie","data":[6], "labels":{"format":"{%value}"}}}';
-        app.exportTo(data, {outputType: 'png', containerId: 'container' + 6}, function(err, image) {
-          expect(image).to.be.instanceof(Buffer);
-          expect(err).to.be.null;
-
-          var index = 6;
-          exit(index, image);
-        });
-
-        data = '{"chart":{"type":"pie","data":[7], "labels":{"format":"{%value}"}}}';
-        app.exportTo(data, {outputType: 'png', containerId: 'container' + 7}, function(err, image) {
-          expect(image).to.be.instanceof(Buffer);
-          expect(err).to.be.null;
-
-          var index = 7;
-          exit(index, image);
-        });
-
-        data = '{"chart":{"type":"pie","data":[8], "labels":{"format":"{%value}"}}}';
-        app.exportTo(data, {outputType: 'png', containerId: 'container' + 8}, function(err, image) {
-          expect(image).to.be.instanceof(Buffer);
-          expect(err).to.be.null;
-
-          var index = 8;
-          exit(index, image);
-        });
-
-        data = '{"chart":{"type":"pie","data":[9], "labels":{"format":"{%value}"}}}';
-        app.exportTo(data, {outputType: 'png', containerId: 'container' + 9}, function(err, image) {
-          expect(image).to.be.instanceof(Buffer);
-          expect(err).to.be.null;
-
-          var index = 9;
-          exit(index, image);
-        });
-
-        data = '{"chart":{"type":"pie","data":[10], "labels":{"format":"{%value}"}}}';
-        app.exportTo(data, {outputType: 'png', containerId: 'container' + 10}, function(err, image) {
-          expect(image).to.be.instanceof(Buffer);
-          expect(err).to.be.null;
-
-          var index = 10;
-          exit(index, image);
-        });
+        for (var n = 1, len = chartsCount; n <= len; n++) {
+          execUnit(n);
+        }
       });
     });
   })
