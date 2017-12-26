@@ -1,4 +1,6 @@
-[<img src="https://cdn.anychart.com/images/logo-transparent-segoe.png?2" width="234px" alt="AnyChart - Robust JavaScript/HTML5 Chart library for any project">](https://www.anychart.com) [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![Package Quality][quality-image]][quality-url]
+[<img src="https://cdn.anychart.com/images/logo-transparent-segoe.png?2" width="234px" alt="AnyChart - Robust JavaScript/HTML5 Chart library for any project">](https://www.anychart.com)
+
+[![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![Package Quality][quality-image]][quality-url]
 
 # AnyChart NodeJS module.
 
@@ -248,9 +250,9 @@ Please, take a look at examples:
 
 [© AnyChart.com - JavaScript charts](http://www.anychart.com). [![Analytics](https://ga-beacon.appspot.com/UA-228820-4/Plugins/NodeJS?pixel&useReferer)](https://github.com/igrigorik/ga-beacon)
 
-[npm-image]: https://img.shields.io/npm/v/vm2.svg?style=flat-square
+[npm-image]: https://img.shields.io/npm/v/anychart-nodejs.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/anychart-nodejs
-[downloads-image]: https://img.shields.io/npm/dm/vm2.svg?style=flat-square
+[downloads-image]: https://img.shields.io/npm/dm/anychart-nodejs.svg?style=flat-square
 [downloads-url]: https://www.npmjs.com/package/anycahrt-nodejs
-[quality-image]: http://npm.packagequality.com/shield/vm2.svg?style=flat-square
+[quality-image]: http://npm.packagequality.com/shield/anychart-nodejs.svg?style=flat-square
 [quality-url]: http://packagequality.com/#?package=anycahrt-nodejs
