@@ -33,7 +33,7 @@ apt-get install imagemagick librsvg2-dev
 Install ImageMagick and librsvg on Mac OS X
 
 ```
-brew install imagemagick --with-webp librsvg
+brew install imagemagick librsvg
 ```
 
 Install ImageMagick and librsvg on Windows:
