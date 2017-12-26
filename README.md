@@ -47,12 +47,11 @@ To generate JPG image a chart from chart instance, create index.js file with the
 ```javascript
 // require file system and jsdom
 var fs = require('fs');
+var jsdom = require('jsdom').jsdom;
 
-//require jsdom class (important - jsdom package 11.5.1 or later version)
-var JSDOM = require('jsdom').JSDOM;
-
-// create window
-var window = (new JSDOM('<body><div id="container"></div></body>', {runScripts: "dangerously"})).window;
+// create default jsdom view (important - jsdom version ^9.9.1)
+var document = jsdom('<body><div id="container"></div></body>');
+var window = document.defaultView;
 
 // require anychart and anychart export modules
 var anychart = require('anychart')(window);
