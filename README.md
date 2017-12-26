@@ -16,6 +16,7 @@ Consider it for reporting systems that send charts by email or social networks s
 * [License](#license)
 
 ## Download and install
+IMPORTANT: Requires Node.js 6 or newer
 You can install AnyChart NodeJS export module using **npm**, **bower** or **yarn**:
 
 * `npm install anychart-nodejs`
