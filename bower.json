@@ -25,10 +25,23 @@
     "library"
   ],
   "dependencies": {
-    "opentype.js": "^0.6.6",
+    "anychart": "^8.0.0",
     "async": "^0.9.2",
-    "es6-promise": "^4.0.5",
-    "anychart": "8.0.0-dev-preview",
-    "jsdom": "^9.9.1"
+    "deasync": "^0.1.12",
+    "es6-promise": "^4.2.2",
+    "fast-xml-parser": "^2.8.3",
+    "fontfaceobserver": "^2.0.13",
+    "gm": "^1.23.0",
+    "js-gc": "^0.0.3",
+    "jsdom": "^9.9.1",
+    "mime-types": "^2.1.17",
+    "opentype.js": "^0.6.6",
+    "request": "^2.83.0",
+    "vm2": "^3.5.2",
+    "xmldom": "^0.1.27"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.5.3"
   }
 }

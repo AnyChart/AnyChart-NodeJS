@@ -255,4 +255,4 @@ Please, take a look at examples:
 [downloads-image]: https://img.shields.io/npm/dm/anychart-nodejs.svg?style=flat-square
 [downloads-url]: https://www.npmjs.com/package/anychart-nodejs
 [quality-image]: http://npm.packagequality.com/shield/anychart-nodejs.svg?style=flat-square
-[quality-url]: http://packagequality.com/#?package=anycahrt-nodejs
+[quality-url]: http://packagequality.com/#?package=anychart-nodejs
