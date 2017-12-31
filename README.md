@@ -221,7 +221,7 @@ $ node index.js
 ```
 
 Please, take a look at examples:
-* [Report Generation Utility](https://github.com/anychart-integrations/nodejs-report-generation-utilily)
+* [Report Generation Utility](https://github.com/anychart-integrations/nodejs-report-generation-utility)
 * [Image Generation Utility](https://github.com/anychart-integrations/nodejs-image-generation-utility)
 * [Export Server Application](https://github.com/anychart-integrations/nodejs-export-server-application)
 
