@@ -1,6 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var chai = require('chai');
+var JSDOM = require('jsdom').JSDOM;
 const expect = chai.expect;
 var app = require('../lib/anychart-node');
 
@@ -13,9 +14,17 @@ function partial(fn, var_args) {
   };
 }
 
-describe('Exporting', function() {
-  describe('exportTo', function() {
-    describe('Second param as string (output type) | to pdf', function() {
+function createWindow() {
+  return (new JSDOM('', {runScripts: 'dangerously'})).window;
+}
+
+function createAnychart() {
+  return require('anychart')(createWindow());
+}
+
+describe('Method', function() {
+  describe('\'exportTo\' with', function() {
+    describe('second param as string (output type) | to pdf', function() {
       var outputType = 'pdf';
 
       it('check promise', function(done) {
@@ -64,8 +73,7 @@ describe('Exporting', function() {
       });
 
       it('object -> pdf', function(done) {
-        var doc = require('jsdom').jsdom();
-        var anychart = require('anychart')(doc.defaultView);
+        var anychart = createAnychart();
 
         var chart = anychart.pie([10, 20, 8, 5, 12, 9]);
         chart.container('container').draw();
@@ -80,7 +88,7 @@ describe('Exporting', function() {
 
     });
 
-    describe('Second param as string (output type) | to png', function() {
+    describe('second param as string (output type) | to png', function() {
       var outputType = 'png';
 
       it('check promise', function(done) {
@@ -129,8 +137,7 @@ describe('Exporting', function() {
       });
 
       it('object -> pdf', function(done) {
-        var doc = require('jsdom').jsdom();
-        var anychart = require('anychart')(doc.defaultView);
+        var anychart = createAnychart();
 
         var chart = anychart.pie([10, 20, 8, 5, 12, 9]);
         chart.container('container').draw();
@@ -145,7 +152,7 @@ describe('Exporting', function() {
 
     });
 
-    describe('Second param as object | to png', function() {
+    describe('second param as object | to png', function() {
       it('check promise', function(done) {
         var params = {
           outputType: 'png'
@@ -209,8 +216,7 @@ describe('Exporting', function() {
           outputType: 'png'
         };
 
-        var doc = require('jsdom').jsdom();
-        var anychart = require('anychart')(doc.defaultView);
+        var anychart = createAnychart();
 
         var chart = anychart.pie([10, 20, 8, 5, 12, 9]);
         chart.container('container').draw();
@@ -228,7 +234,7 @@ describe('Exporting', function() {
           outputType: 'png'
         };
 
-        var doc = require('jsdom').jsdom();
+        var doc = createWindow().document;
         var anychart = require('anychart')(doc.defaultView);
 
         var chart = anychart.pie([10, 20, 8, 5, 12, 9]);
@@ -250,7 +256,7 @@ describe('Exporting', function() {
           outputType: 'png'
         };
 
-        var doc = require('jsdom').jsdom();
+        var doc = createWindow().document;
         var anychart = require('anychart')(doc.defaultView);
 
         app.anychartify(doc);
@@ -272,7 +278,7 @@ describe('Exporting', function() {
           outputType: 'png'
         };
 
-        var doc = require('jsdom').jsdom('<div id="container"></div>');
+        var doc = (new (require('jsdom').JSDOM)('<div id="container"></div>', {runScripts: 'dangerously'})).window.document;
         var anychart = require('anychart')(doc.defaultView);
 
         app.anychartify(doc);
@@ -293,7 +299,7 @@ describe('Exporting', function() {
       });
     });
 
-    describe('Second param as undefined | default - jpg', function() {
+    describe('second param as undefined | default - jpg', function() {
       it('check promise', function(done) {
         var data = "anychart.onDocumentReady(function() {var chart = anychart.pie([10, 20, 8, 5, 12, 9]); chart.container('container').draw();});";
 
@@ -340,8 +346,7 @@ describe('Exporting', function() {
       });
 
       it('chart', function(done) {
-        var doc = require('jsdom').jsdom();
-        var anychart = require('anychart')(doc.defaultView);
+        var anychart = createAnychart();
 
         var chart = anychart.pie([10, 20, 8, 5, 12, 9]);
         chart.container('container').draw();
