@@ -1,9 +1,9 @@
 language: node_js
 sudo: required
 dist: trusty
+os:
 node_js:
   - "6"
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -y imagemagick
-  - sudo apt-get install -y librsvg2-dev
+  - sudo apt-get install -y imagemagick librsvg2-bin
