@@ -190,6 +190,7 @@ Loads the specified font synchronously.
 Name | Type | Description
 --- | --- | ---
 `path` | string | Path to font.
+
 **Returns:**  
 Object
 
