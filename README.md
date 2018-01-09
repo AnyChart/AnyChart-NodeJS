@@ -3,9 +3,8 @@
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 [![Package Quality][quality-image]][quality-url]
-
-<!--[![Build status][travis-image]][travis-url]-->
-<!--[![David-dm][dependencies-image]][dependencies-url]-->
+[![Build status][travis-image]][travis-url]
+[![David-dm][dependencies-image]][dependencies-url]
 <!--[![License][licence-image]][licence-url]-->
 
 
