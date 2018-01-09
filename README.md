@@ -1,6 +1,13 @@
 [<img src="https://cdn.anychart.com/images/logo-transparent-segoe.png?2" width="234px" alt="AnyChart - Robust JavaScript/HTML5 Chart library for any project">](https://www.anychart.com)
 
-[![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![Package Quality][quality-image]][quality-url]
+[![NPM Version][npm-image]][npm-url]
+[![NPM Downloads][downloads-image]][downloads-url]
+[![Package Quality][quality-image]][quality-url]
+
+<!--[![Build status][travis-image]][travis-url]-->
+<!--[![David-dm][dependencies-image]][dependencies-url]-->
+<!--[![License][licence-image]][licence-url]-->
+
 
 # AnyChart NodeJS module.
 
@@ -256,3 +263,9 @@ Please, take a look at examples:
 [downloads-url]: https://www.npmjs.com/package/anychart-nodejs
 [quality-image]: http://npm.packagequality.com/shield/anychart-nodejs.svg?style=flat-square
 [quality-url]: http://packagequality.com/#?package=anychart-nodejs
+[licence-image]: https://img.shields.io/npm/l/anychart-nodejs.svg?style=flat-square
+[licence-url]: https://github.com/AnyChart/AnyChart-NodeJS/blob/master/LICENSE
+[travis-image]: https://img.shields.io/travis/AnyChart/AnyChart-NodeJS.svg?style=flat-square&branch=master&label=unit
+[travis-url]: https://travis-ci.org/AnyChart/AnyChart-NodeJS
+[dependencies-image]: https://david-dm.org/AnyChart/AnyChart-NodeJS.svg?style=flat-square
+[dependencies-url]: https://david-dm.org/AnyChart/AnyChart-NodeJS
