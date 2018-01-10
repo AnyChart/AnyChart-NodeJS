@@ -265,15 +265,15 @@ Please, take a look at examples:
 
 [© AnyChart.com - JavaScript charts](http://www.anychart.com). [![Analytics](https://ga-beacon.appspot.com/UA-228820-4/Plugins/NodeJS?pixel&useReferer)](https://github.com/igrigorik/ga-beacon)
 
-[npm-image]: https://img.shields.io/npm/v/anychart-nodejs.svg?style=flat-square
+[npm-image]: https://img.shields.io/npm/v/anychart-nodejs.svg
 [npm-url]: https://www.npmjs.com/package/anychart-nodejs
-[downloads-image]: https://img.shields.io/npm/dm/anychart-nodejs.svg?style=flat-square
+[downloads-image]: https://img.shields.io/npm/dm/anychart-nodejs.svg
 [downloads-url]: https://www.npmjs.com/package/anychart-nodejs
-[quality-image]: http://npm.packagequality.com/shield/anychart-nodejs.svg?style=flat-square
+[quality-image]: http://npm.packagequality.com/shield/anychart-nodejs.svg
 [quality-url]: http://packagequality.com/#?package=anychart-nodejs
-[licence-image]: https://img.shields.io/npm/l/anychart-nodejs.svg?style=flat-square
+[licence-image]: https://img.shields.io/npm/l/anychart-nodejs.svg
 [licence-url]: https://github.com/AnyChart/AnyChart-NodeJS/blob/master/LICENSE
-[travis-image]: https://img.shields.io/travis/AnyChart/AnyChart-NodeJS.svg?style=flat-square&branch=master&label=unit
+[travis-image]: https://img.shields.io/travis/AnyChart/AnyChart-NodeJS.svg?branch=master&label=unit
 [travis-url]: https://travis-ci.org/AnyChart/AnyChart-NodeJS
-[dependencies-image]: https://david-dm.org/AnyChart/AnyChart-NodeJS.svg?style=flat-square
+[dependencies-image]: https://david-dm.org/AnyChart/AnyChart-NodeJS.svg
 [dependencies-url]: https://david-dm.org/AnyChart/AnyChart-NodeJS
