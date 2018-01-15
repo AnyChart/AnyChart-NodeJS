@@ -32,7 +32,7 @@
     "async": "^2.6.0",
     "deasync": "^0.1.12",
     "es6-promise": "^4.2.2",
-    "fast-xml-parser": "^2.8.3",
+    "fast-xml-parser": "^2.9.0",
     "fontfaceobserver": "^2.0.13",
     "gm": "^1.23.1",
     "js-gc": "^0.0.4",
