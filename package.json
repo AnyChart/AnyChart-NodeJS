@@ -1,7 +1,7 @@
 {
   "name": "anychart-nodejs",
   "main": "./lib/anychart-node",
-  "version": "1.3.6",
+  "version": "1.3.8",
   "description": "AnyChart NodeJS module provides an easy way to generate SVG, JPG and PNG images of the charts on the server side.",
   "title": "AnyChart NodeJS",
   "homepage": "https://github.com/AnyChart/AnyChart-NodeJS",
@@ -41,7 +41,8 @@
     "opentype.js": "^0.7.3",
     "request": "^2.83.0",
     "vm2": "^3.5.2",
-    "xmldom": "^0.1.27"
+    "xmldom": "^0.1.27",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
