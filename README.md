@@ -36,7 +36,7 @@ AnyChart NodeJS module requires [ImageMagick](https://www.imagemagick.org/script
 Install ImageMagick and librsvg on Linux:
 
 ```
-apt-get install imagemagick librsvg2-dev
+apt-get install imagemagick librsvg2-dev librsvg2-bin
 ```
 
 Install ImageMagick and librsvg on Mac OS X
